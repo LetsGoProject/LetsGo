@@ -1,0 +1,40 @@
+insert into locations(location_name) values('zala'),('kino'),('theatre');
+
+insert into types(type_name) values('kocert'),('film'),('postanovka');
+
+insert into users(user_name,user_email,password,is_admin) 
+values 
+('petkata','petkata@mail.bg','1234',1),
+('nasko','nasko_btr@abv.bg','562',0)
+;
+
+insert into events (event_name,ticket_price,event_date,event_location,event_type) 
+values 
+('deadpool',15 ,'2016-02-25',
+(SELECT location_id FROM locations WHERE location_name = 'kino'),
+(SELECT type_id FROM types WHERE type_name = 'film')
+);
+
+select event_name,event_date,type_name 
+from events 
+join types on events.event_type = types.type_id;
+
+select event_name,event_date,type_name,location_name 
+from events 
+join types on events.event_type = types.type_id 
+join locations on events.event_location = locations.location_id;
+	
+insert into events_users(ev_id,u_id)
+values
+(
+(select event_id from events where event_name = 'deadpool'),
+(select user_id from users where user_email = 'nasko_btr@abv.bg')
+);	
+
+select event_name, user_name 
+from events_users 
+join events on events_users.ev_id = events.event_id 
+join users on events_users.u_id = users.user_id;	
+
+DELETE FROM events_users WHERE ev_id = (SELECT event_id FROM events WHERE event_name = 'inputEvent')
+DELETE FROM events WHERE event_name = 'inputEvent'

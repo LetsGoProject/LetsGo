@@ -1,0 +1,6 @@
+INSERT INTO favourite_events (event_name,ticket_price,date,event_type,) 
+	VALUES("event1", 65 , "2016-12-31", SELECT type_id FROM types WHERE type_name = 'inputtype'  )
+	
+	
+DELETE FROM favourite_events WHERE event_name = 'inputEvent'
+

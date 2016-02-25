@@ -1,0 +1,22 @@
+PRAGMA foreign_keys = ON;
+
+CREATE TABLE favourite_events(
+   event_id INT PRIMARY KEY     NOT NULL,
+   event_name     CHARACTER    NOT NULL UNIQUE,
+   ticket_price   NUMERIC 	  NOT NULL,
+   event_date				DATE	NOT NULL,
+   event_location       INT     NOT NULL,
+   event_type       INT     NOT NULL,
+   FOREIGN KEY(event_location) REFERENCES locations(location_id),
+   FOREIGN KEY(event_type) REFERENCES types(type_id)
+);
+
+CREATE TABLE locations(
+   location_id INT PRIMARY KEY     NOT NULL,
+   location_name		CHARACTER    NOT NULL,
+);
+
+CREATE TABLE types(
+   type_id INT PRIMARY KEY     NOT NULL,
+   type_name		CHARACTER    NOT NULL,
+);

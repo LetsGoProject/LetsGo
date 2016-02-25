@@ -1,0 +1,39 @@
+PRAGMA foreign_keys = ON;
+
+ CREATE TABLE IF NOT EXISTS events(
+   event_id integer PRIMARY KEY autoincrement NOT NULL,
+   event_name CHARACTER NOT NULL UNIQUE,
+   ticket_price NUMERIC NOT NULL,
+   event_date DATE NOT NULL,
+   event_location INT NOT NULL REFERENCES locations(location_id),
+   event_type INT NOT NULL REFERENCES types(type_id)
+);
+
+CREATE TABLE IF NOT EXISTS users(
+   user_id integer PRIMARY KEY autoincrement NOT NULL,
+   user_name VARCHAR NOT NULL UNIQUE,
+   user_email VARCHAR NOT NULL UNIQUE,
+   password CHARACTER NOT NULL,
+   is_admin INT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS events_users(
+   ev_id INT NOT NULL,
+   u_id INT NOT NULL,
+   FOREIGN KEY(ev_id) REFERENCES events(event_id),
+   FOREIGN KEY(u_id) REFERENCES users(user_id)
+);
+
+CREATE TABLE IF NOT EXISTS locations(
+   location_id integer PRIMARY KEY autoincrement NOT NULL,
+   location_name varchar NOT NULL UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS types(
+   type_id integer primary key autoincrement not null,
+   type_name character not null unique
+);
+
+
+
+
