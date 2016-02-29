@@ -65,4 +65,10 @@
             android:layout_column="2" />
     </GridLayout>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show all users"
+        android:id="@+id/btn_Show_All" />
+
 </LinearLayout>

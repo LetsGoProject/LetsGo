@@ -12,9 +12,4 @@
     tools:context="com.letsgo.controller.WelcomeActivity"
     tools:showIn="@layout/app_bar_welcome">
 
-    <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/listView"
-        android:layout_weight="1" />
 </LinearLayout>

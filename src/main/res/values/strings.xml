@@ -7,7 +7,7 @@
     <string name="register_email">Email</string>
     <string name="register_pass">Password</string>
     <string name="register_retype_pass">Retype password</string>
-    <string name="title_activity_welcome">WelcomeActivity</string>
+    <string name="title_activity_welcome">LetsGo</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
