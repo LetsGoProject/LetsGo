@@ -36,9 +36,9 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String userEmail = dbAdapter.login(edtLoginEmail.getText().toString(),edtLoginPass.getText().toString());
-                Log.i("00000000",String.valueOf(userEmail));
                 if (userEmail!= null && userEmail.equals(edtLoginEmail.getText().toString())) {
                     Intent intent = new Intent(LoginActivity.this, WelcomeActivity.class);
+                    intent.putExtra("userMail",userEmail);
                     startActivity(intent);
                     finish();
                 }
@@ -53,7 +53,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(LoginActivity.this,RegisterActivity.class);
                 startActivity(intent);
-//                finish();
+                finish();
             }
         });
     }

@@ -12,4 +12,12 @@
     tools:context="com.letsgo.controller.WelcomeActivity"
     tools:showIn="@layout/app_bar_welcome">
 
+
+    <LinearLayout
+        android:id="@+id/frag_container"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </LinearLayout>
 </LinearLayout>

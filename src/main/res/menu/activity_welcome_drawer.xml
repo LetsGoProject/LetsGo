@@ -3,6 +3,10 @@
 
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/nav_all"
+            android:icon="@drawable/ic_menu_send"
+            android:title="All events" />
+        <item
             android:id="@+id/nav_watchlist"
             android:icon="@drawable/ic_menu_watchlist"
             android:title="WatchList" />
@@ -19,26 +23,14 @@
             android:icon="@drawable/ic_menu_search"
             android:title="Search" />
         <item
-            android:id="@+id/nav_manage"
+            android:id="@+id/nav_edit_profile"
             android:icon="@drawable/ic_menu_manage"
             android:title="Edit Profile" />
         <item
             android:id="@+id/nav_logout"
             android:icon="@drawable/ic_menu_logout"
             android:title="Logout" />
+
+
     </group>
-
-    <item android:title="Communicate">
-        <menu>
-            <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
-        </menu>
-    </item>
-
 </menu>

@@ -23,15 +23,29 @@ public class DBAdapter {
     }
 
     public long addUser(String name, String email, String password) {
-
-//        TODO chech if user exists
-
+/*         chech if user exists*/
         SQLiteDatabase db = dbHelper.getWritableDatabase();
+//        check if email exists
+        if (checkForExisting(db,Constants.USERS_EMAIL,email))
+            return Constants.EXISTING_EMAIL;
+        if (checkForExisting(db,Constants.USERS_NAME,name))
+            return Constants.EXISTING_USERNAME;
         ContentValues cv = new ContentValues();
         cv.put(Constants.USERS_NAME, name);
         cv.put(Constants.USERS_EMAIL, email);
         cv.put(Constants.USERS_PASSWORD, password);
         return db.insert(Constants.TABLE_USERS, null, cv);
+    }
+
+    private boolean checkForExisting(SQLiteDatabase db, String column,String selectionArg){
+
+        String[] columns = {column};
+        String[] selectionArgs = {selectionArg};
+        Cursor cursor = db.query(Constants.TABLE_USERS,columns,column + " =? " ,selectionArgs,null,null,null);
+        if (cursor.moveToFirst()) {
+            return true;
+        }
+        return false;
     }
 
     public String login(String email, String pass){
@@ -44,6 +58,20 @@ public class DBAdapter {
             int emailColumnIndex = cursor.getColumnIndex(Constants.USERS_EMAIL);
             userEmail = cursor.getString(emailColumnIndex);
             return userEmail;
+        }
+        return null;
+    }
+
+    public String getUsername(String email){
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String[] columns = {Constants.USERS_NAME};
+        String[] selectionArgs = {email};
+        Cursor cursor = db.query(Constants.TABLE_USERS,columns,Constants.USERS_EMAIL + " =? ",selectionArgs,null,null,null);
+        if (cursor.moveToFirst()) {
+            String username;
+            int usernameColumnIndex = cursor.getColumnIndex(Constants.USERS_NAME);
+            username = cursor.getString(usernameColumnIndex);
+            return username;
         }
         return null;
     }

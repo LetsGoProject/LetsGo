@@ -4,6 +4,10 @@ package com.letsgo.model.utils;
  * Created by Petkata on 25.2.2016 г..
  */
 public class Constants {
+
+    public static final long EXISTING_EMAIL = 0;
+    public static final long EXISTING_USERNAME = -2;
+
     public static final String DB_NAME = "LetsGo.db";
     public static final String ALLOW_FOREIGN_KEYS = "pragma foreign_keys = on";
     public static final int DB_VERSION = 1;
