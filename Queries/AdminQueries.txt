@@ -1,6 +1,6 @@
-insert into locations(location_name) values('zala'),('kino'),('theatre');
+insert into locations(name,address,contact) values('zala','sofia','tel 8456'),('kino','varna','tel 654');
 
-insert into types(type_name) values('kocert'),('film'),('postanovka');
+insert into types(type) values('kocert'),('film'),('postanovka');
 
 insert into users(user_name,user_email,password,is_admin) 
 values 
@@ -8,16 +8,25 @@ values
 ('nasko','nasko_btr@abv.bg','562',0)
 ;
 
-insert into events (event_name,ticket_price,event_date,event_location,event_type) 
+insert into events (name,description,ticket_price,date,location_fk,type_fk) 
 values 
-('deadpool',15 ,'2016-02-25',
-(SELECT location_id FROM locations WHERE location_name = 'kino'),
-(SELECT type_id FROM types WHERE type_name = 'film')
+('deadpool','mega filmyt na 2016',15 ,'2016-02-25',
+(SELECT _id_pk FROM locations WHERE name = 'kino'),
+(SELECT _id_pk FROM types WHERE type = 'film')
 );
+
+sqlite> select events._id_pk, event_name,type,location_name,event_date from events join types on events.event_type_fk = types._id_pk join locations on
+ events.event_location_fk = locations._id_pk where event_date >  date('now');
+
+
+select events._id_pk, event_name,type,location_name 
+from events 
+join types on events.event_type_fk = types._id_pk 
+join locations on events.event_location_fk = locations._id_pk;
 
 select event_name,event_date,type_name 
 from events 
-join types on events.event_type = types.type_id;
+join types on events.type_fk = types._id_pk;
 
 select event_name,event_date,type_name,location_name 
 from events 

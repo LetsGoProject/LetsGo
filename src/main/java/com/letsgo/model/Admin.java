@@ -2,12 +2,14 @@ package com.letsgo.model;
 
 public class Admin extends Account{
 
-    private DataBase db;
-    private boolean hasConnected;
 
+/*
     public Admin(String email, String password) {
         super(email, password);
     }
+
+    private DataBase db;
+    private boolean hasConnected;
 
     public void connectToDB(DataBase db){
         if (super.getHasLogged()) {
@@ -44,4 +46,5 @@ public class Admin extends Account{
         }
         return false;
     }
+    */
 }

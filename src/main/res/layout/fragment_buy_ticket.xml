@@ -1,92 +1,163 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.letsgo.controller.BuyTicketFragment">
+    tools:context=".controller.FragmentBuyTicket">
 
-
+    <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
+        android:id="@+id/ticket_label_for_event"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="Large Text"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:text="EVENT NAME"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <RelativeLayout
+    <TextView
+        android:id="@+id/ticket_label_for_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/ticket_label_for_event"
+        android:layout_marginTop="80dp"
+        android:text="Date"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/ticket_label_for_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/ticket_label_for_date"
+        android:layout_marginTop="24dp"
+        android:text="Location"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/ticket_label_for_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/ticket_label_for_location"
+        android:layout_marginTop="24dp"
+        android:text="Ticket Price"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/ticket_label_for_quan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/ticket_label_for_price"
+        android:layout_marginTop="24dp"
+        android:text="Quantity"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <Button
+        android:id="@+id/ticket_buy"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/ticket_cancel"
+        android:text="buy" />
 
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:text="Ticket Type"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+    <Button
+        android:id="@+id/ticket_cancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="Cancel" />
 
-        <Spinner
-            android:id="@+id/tickets_type_spinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/textView2" />
+    <TextView
+        android:id="@+id/ticket_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/ticket_label_for_price"
+        android:layout_marginLeft="29dp"
+        android:layout_marginStart="29dp"
+        android:layout_toEndOf="@+id/ticket_label_for_price"
+        android:layout_toRightOf="@+id/ticket_label_for_price"
+        android:text="50"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-        <TextView
-            android:id="@+id/tickets_quantity"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/tickets_add"
-            android:layout_alignTop="@+id/tickets_add"
-            android:layout_toLeftOf="@+id/tickets_add"
-            android:layout_toStartOf="@+id/tickets_add"
-            android:gravity="center_vertical"
-            android:text="0"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+    <TextView
+        android:id="@+id/ticket_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/ticket_label_for_date"
+        android:layout_toEndOf="@+id/ticket_label_for_price"
+        android:layout_toRightOf="@+id/ticket_label_for_price"
+        android:text="31-03-2016"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-        <Button
-            android:id="@+id/tickets_add"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tickets_type_spinner"
-            android:layout_toLeftOf="@+id/tickets_remove"
-            android:layout_toStartOf="@+id/tickets_remove"
-            android:text="+" />
+    <TextView
+        android:id="@+id/ticket_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/ticket_label_for_location"
+        android:layout_toEndOf="@+id/ticket_label_for_price"
+        android:layout_toRightOf="@+id/ticket_label_for_price"
+        android:text="Stadion ravna polqna"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-        <Button
-            android:id="@+id/tickets_remove"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/tickets_type_spinner"
-            android:text="-" />
+    <TextView
+        android:id="@+id/ticket_quan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/ticket_label_for_quan"
+        android:layout_marginLeft="13dp"
+        android:layout_marginStart="13dp"
+        android:layout_toEndOf="@+id/ticket_add"
+        android:layout_toRightOf="@+id/ticket_add"
+        android:text="3"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-        <TextView
-            android:id="@+id/tickets_price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:text="Total: 0.0"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+    <Button
+        android:id="@+id/ticket_add"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/ticket_label_for_quan"
+        android:layout_alignTop="@+id/ticket_label_for_quan"
+        android:layout_toEndOf="@+id/ticket_label_for_price"
+        android:layout_toRightOf="@+id/ticket_label_for_price"
+        android:background="@drawable/hollow_btn"
+        android:text="+" />
 
-        <Button
-            android:id="@+id/button3"
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/tickets_cancel"
-            android:text="Buy" />
+    <Button
+        android:id="@+id/ticket_remove"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/ticket_label_for_quan"
+        android:layout_marginLeft="13dp"
+        android:layout_marginStart="13dp"
+        android:layout_toEndOf="@+id/ticket_quan"
+        android:layout_toRightOf="@+id/ticket_quan"
+        android:background="@drawable/hollow_btn"
+        android:text="-" />
 
-        <Button
-            android:id="@+id/tickets_cancel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:text="Cancel" />
-    </RelativeLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/ticket_buy"
+        android:layout_toLeftOf="@+id/ticket_total"
+        android:text="Total: "
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
+    <TextView
+        android:id="@+id/ticket_total"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/ticket_buy"
+        android:layout_centerInParent="true"
+        android:text="150"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
-</LinearLayout>
+</RelativeLayout>

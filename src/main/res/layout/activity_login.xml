@@ -8,53 +8,59 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".controller.LoginActivity">
+    tools:context=".controller.ActivityLogin">
 
     <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textEmailAddress"
-        android:hint="@string/login_email"
-        android:ems="10"
         android:id="@+id/edt_Login_Email"
-        android:layout_gravity="center_horizontal" />
-
-    <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/login_pass"
-        android:inputType="textPassword"
+        android:layout_gravity="center_horizontal"
         android:ems="10"
-        android:id="@+id/edt_Login_Pass" />
+        android:hint="@string/login_email"
+        android:inputType="textEmailAddress" />
+
+    <EditText
+        android:id="@+id/edt_Login_Pass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/login_pass"
+        android:inputType="textPassword" />
+
+    <CheckBox
+        android:id="@+id/chb_keep_logged"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Keep me logged" />
 
     <LinearLayout
-        android:orientation="horizontal"
-        android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal">
 
         <GridLayout
-            android:padding="20sp"
-            android:columnCount="2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:columnCount="2"
+            android:padding="20sp">
 
             <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="20sp"
-                android:text="Login"
                 android:id="@+id/btn_Login_Login"
-                android:layout_row="0"
-                android:layout_column="0" />
-
-            <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="register"
-                android:id="@+id/btn_Login_Register"
+                android:layout_column="0"
+                android:layout_marginRight="20sp"
                 android:layout_row="0"
-                android:layout_column="1" />
+                android:text="Login" />
+
+            <Button
+                android:id="@+id/btn_Login_Register"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:layout_row="0"
+                android:text="register" />
         </GridLayout>
     </LinearLayout>
 </LinearLayout>

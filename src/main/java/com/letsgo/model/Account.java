@@ -9,9 +9,7 @@ public abstract class Account {
     private boolean hasLogged;
 
 
-    public Account(String email, String password) {
-        this.validateEmail(email);
-        this.validatePassword(password);
+    public Account() {
     }
 
     private void validatePassword(String password){

@@ -1,5 +1,8 @@
 package com.letsgo.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -7,73 +10,95 @@ import java.util.Set;
 /**
  * Created by Petkata on 24.2.2016 г..
  */
-public class User extends Account {
+public class User extends Account implements Parcelable{
+
+    private long id;
+    private String username;
+    private String email;
+    private String password;
+    private boolean isAdmin;
+// it is empty so it is called and not the constructor with parcel
+    public User(){}
 
     private Set<Event> watchtList;
 
-    public User(String email, String password) {
-        super(email, password);
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     @Override
-    public void login(String pass) {
-        if (!DataBase.getInstance().getUserList().contains(this)) {
-            DataBase.getInstance().addUserToDb(this);
-        }
-        super.login(pass);
-
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public void userAddToWatchList(String eventName){
-        if (this.checkUser()) {
-            if (this.watchtList == null) {
-                this.watchtList = new HashSet<Event>();
-            }
-            if (DataBase.getInstance().getEvent(eventName) != null) {
-                if(this.watchtList.add(DataBase.getInstance().getEvent(eventName))){
-
-                }
-            }
-            return;
-        }
+    public String getPassword() {
+        return password;
     }
 
-    public void userRemoveFromWatchList(String eventName){
-        if (this.checkUser()) {
-            Iterator<Event> it;
-            it = this.watchtList.iterator();
-            while (it.hasNext()) {
-                if (it.next().getEventName().equals(eventName)) {
-                    it.remove();
-                    return;
-                }
-            }
-            return;
-        }
+    @Override
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    public void userShowWatchList(){
-        if (this.checkUser()) {
-            for (Event event : watchtList) {
-                System.out.println(event);
-            }
-            return;
-        }
+    public boolean getIsAdmin() {
+        return isAdmin;
     }
 
-    public void editprofile(String newEmail, String newPassword){
-        if (newEmail!=null) {
-            super.setEmail(newEmail);
-        }
-        if (newPassword!=null) {
-            super.setPassword(newPassword);
-        }
+    public void setIsAdmin(boolean isAdmin) {
+        this.isAdmin = isAdmin;
     }
 
-    private boolean checkUser(){
-        if (super.getHasLogged() && DataBase.getInstance().getUserList().contains(this)) {
-            return true;
+    public Set<Event> getWatchtList() {
+        return watchtList;
+    }
+
+    public void setWatchtList(Set<Event> watchtList) {
+        this.watchtList = watchtList;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(this.id);
+        dest.writeString(this.username);
+        dest.writeString(this.email);
+        dest.writeString(this.password);
+        dest.writeByte((byte) (this.isAdmin ? 1 : 0));
+    }
+    public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
+        public User createFromParcel(Parcel in) {
+            return new User(in);
         }
-        else return false;
+
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
+    private User (Parcel in) {
+        this.id = in.readLong();
+        this.username = in.readString();
+        this.email = in.readString();
+        this.password = in.readString();
+        this.isAdmin = in.readByte() != 0;
     }
 }
