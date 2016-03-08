@@ -3,19 +3,25 @@ package com.letsgo.model.datasources;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteQueryBuilder;
+import android.util.Log;
 
 import com.letsgo.model.Event;
 import com.letsgo.model.daointerfaces.EventDao;
 import com.letsgo.model.queries.Queries;
 import com.letsgo.model.utils.Constants;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
  * Created by Petkata on 5.3.2016 г..
  */
-public class EventDataSource extends DataSource implements EventDao{
+public class EventDataSource extends DataSource implements EventDao {
 
 
     public EventDataSource(Context context) {
@@ -120,17 +126,15 @@ public class EventDataSource extends DataSource implements EventDao{
     @Override
     public List<Event> showEvents(String period) {
         List<Event> allEvents = new ArrayList<>();
-//        String[] columns = {Constants.EVENTS_NAME,Constants.EVENTS_DATE,Constants.EVENTS_LOCATION};
-//        TODO remake rawquery to query
         Cursor cursor = null;
-        if (period.equals("upcoming")){
-            cursor = database.rawQuery(Queries.EVENT_UPCOMING_JOIN_TYPE_LOCATION,null);
-        }
-        if (period.equals("past")){
-            cursor = database.rawQuery(Queries.EVENT_PAST_JOIN_TYPE_LOCATION,null);
-        }
+
+        if (period.equals("upcoming"))
+            cursor = joinEventsLocationsTypes().query(database, eventColumns(), Constants.EVENTS_DATE + " > date('now') ", null, null, null, null, null);
+        if (period.equals("past"))
+            cursor = joinEventsLocationsTypes().query(database, eventColumns(), Constants.EVENTS_DATE + " < date('now') ", null, null, null, null, null);
+
         cursor.moveToFirst();
-        while (!cursor.isAfterLast()){
+        while (!cursor.isAfterLast()) {
             Event event = cursorToEvent(cursor);
             allEvents.add(event);
             cursor.moveToNext();
@@ -140,12 +144,46 @@ public class EventDataSource extends DataSource implements EventDao{
     }
 
     @Override
-    public List<Event> showUpcommingEvents() {
+    public List<Event> showSearchResults(String name, String type, String location, String dateBefore, String dateAfter, String dateFuture, String datepast) {
         return null;
     }
 
     @Override
-    public List<Event> showPastEvents() {
-        return null;
+    public List<Event> showSearchResults(String date) {
+        List<Event> searchResults = new ArrayList<>();
+        Cursor cursor = null;
+
+        String[] args = {date};
+
+        cursor = joinEventsLocationsTypes().query(database, eventColumns(), Constants.EVENTS_DATE + " > ? ", args, null, null, null, null);
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            Event event = cursorToEvent(cursor);
+            searchResults.add(event);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return searchResults;
+    }
+
+    private SQLiteQueryBuilder joinEventsLocationsTypes() {
+        SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
+        queryBuilder.setTables(Constants.TABLE_EVENTS + " join " + Constants.TABLE_TYPES + " on " + Constants.TABLE_EVENTS + "." + Constants.EVENTS_TYPE + " = " +
+                Constants.TABLE_TYPES + "." + Constants.AUTOINCREMETN_COLUMN +
+                " join " + Constants.TABLE_LOCATIONS + " on " + Constants.TABLE_EVENTS + "." + Constants.EVENTS_LOCATION + " = " +
+                Constants.TABLE_LOCATIONS + "." + Constants.AUTOINCREMETN_COLUMN);
+        return queryBuilder;
+    }
+
+    private String[] eventColumns() {
+        String[] columns = {Constants.TABLE_EVENTS + "." + Constants.AUTOINCREMETN_COLUMN,
+                Constants.EVENTS_NAME,
+                Constants.EVENTS_DESCRIPTION,
+                Constants.EVENTS_TICKET_PRICE,
+                Constants.EVENTS_DATE,
+                Constants.TYPES_TYPE,
+                Constants.LOCATIONS_NAME};
+        return columns;
     }
 }
