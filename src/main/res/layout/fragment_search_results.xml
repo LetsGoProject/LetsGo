@@ -6,27 +6,26 @@
 
 
     <TextView
-        android:layout_centerHorizontal="true"
         android:id="@+id/search_criteria"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
         android:text="SEARCH CRITERIA"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <ListView
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/search_criteria"
-        android:layout_above="@+id/refine_search"
         android:id="@+id/search_result"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        />
+        android:layout_above="@+id/refine_search"
+        android:layout_below="@+id/search_criteria"
+        android:layout_centerHorizontal="true" />
 
     <Button
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
         android:id="@+id/refine_search"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Refine search" />
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="New search" />
 </RelativeLayout>

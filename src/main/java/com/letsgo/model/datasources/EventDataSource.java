@@ -31,7 +31,7 @@ public class EventDataSource extends DataSource implements EventDao {
     @Override
     public Event createEvent(String name, String description, double price, String date, String location, String type) {
         Event event = new Event();
-        // TODO       check if email exists
+        // TODO       check if event exists
 //        if (checkForExisting(Constants.TABLE_USERS, Constants.USERS_EMAIL, email)) {
 //            event.setUsername(Constants.EXISTING_EMAIL);
 //            return event;
@@ -67,19 +67,6 @@ public class EventDataSource extends DataSource implements EventDao {
         cursor.moveToFirst();
         Event event = cursorToEvent(cursor);
         cursor.close();
-        return event;
-    }
-
-    private Event cursorToEvent(Cursor cursor) {
-        Event event = new Event();
-        event.setEventId(cursor.getLong(cursor.getColumnIndex(Constants.AUTOINCREMETN_COLUMN)));
-        event.setEventName(cursor.getString(cursor.getColumnIndex(Constants.EVENTS_NAME)));
-        event.setEventDescription(cursor.getString(cursor.getColumnIndex(Constants.EVENTS_DESCRIPTION)));
-        event.setEventTicketPrice(cursor.getDouble(cursor.getColumnIndex(Constants.EVENTS_TICKET_PRICE)));
-        event.setEventDate(cursor.getString(cursor.getColumnIndex(Constants.EVENTS_DATE)));
-        event.setEventLocation(cursor.getString(cursor.getColumnIndex(Constants.LOCATIONS_NAME)));
-        event.setEventType(cursor.getString(cursor.getColumnIndex(Constants.TYPES_TYPE)));
-
         return event;
     }
 
@@ -144,8 +131,48 @@ public class EventDataSource extends DataSource implements EventDao {
     }
 
     @Override
-    public List<Event> showSearchResults(String name, String type, String location, String dateBefore, String dateAfter, String dateFuture, String datepast) {
-        return null;
+    public List<Event> showSearchResults(String name, String type, String location, String dateAfter, String dateBefore) {
+
+        List<Event> nameSearchResults = new ArrayList<>();
+        List<Event> typeSearchResults = new ArrayList<>();
+        List<Event> locationSearchResults = new ArrayList<>();
+        List<Event> dateAfterSearchResults = new ArrayList<>();
+        List<Event> dateBeforeSearchResults = new ArrayList<>();
+
+        if(name.length() > 0)
+            nameSearchResults = results("%"+name+"%", Constants.EVENTS_NAME, "like");
+        else
+            nameSearchResults = allEvents();
+
+        if(!type.equals("Choose"))
+            typeSearchResults = results(type, Constants.TYPES_TYPE, "=");
+        else
+            typeSearchResults = allEvents();
+
+        nameSearchResults.retainAll(typeSearchResults);
+
+        if( !location.equals("Choose"))
+            locationSearchResults = results(location, Constants.LOCATIONS_NAME, "=");
+        else
+            locationSearchResults = allEvents();
+
+        nameSearchResults.retainAll(locationSearchResults);
+
+        if(dateAfter != null && dateAfter.length() >1)
+            dateAfterSearchResults = results(dateAfter, Constants.EVENTS_DATE, ">");
+        else
+            dateAfterSearchResults = allEvents();
+
+        nameSearchResults.retainAll(dateAfterSearchResults);
+
+        if(dateBefore != null && dateBefore.length() >1)
+            dateBeforeSearchResults = results(dateBefore, Constants.EVENTS_DATE, "<");
+        else
+            dateBeforeSearchResults = allEvents();
+
+        nameSearchResults.retainAll(dateBeforeSearchResults);
+
+        return nameSearchResults;
     }
 
     @Override
@@ -167,6 +194,38 @@ public class EventDataSource extends DataSource implements EventDao {
         return searchResults;
     }
 
+    private List<Event> results(String searchCriteria, String column, String comparator) {
+        List<Event> searchResults = new ArrayList<>();
+        Cursor cursor = null;
+
+        String[] args = {searchCriteria};
+
+        cursor = joinEventsLocationsTypes().query(database, eventColumns(), column + " " + comparator + " ? ", args, null, null, null, null);
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            Event event = cursorToEvent(cursor);
+            searchResults.add(event);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return searchResults;
+    }
+
+    private List<Event> allEvents() {
+        List<Event> allEvents = new ArrayList<>();
+        Cursor cursor = null;
+        cursor = joinEventsLocationsTypes().query(database, eventColumns(), null, null, null, null, null, null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            Event event = cursorToEvent(cursor);
+            allEvents.add(event);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return allEvents;
+    }
+
     private SQLiteQueryBuilder joinEventsLocationsTypes() {
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
         queryBuilder.setTables(Constants.TABLE_EVENTS + " join " + Constants.TABLE_TYPES + " on " + Constants.TABLE_EVENTS + "." + Constants.EVENTS_TYPE + " = " +
@@ -177,7 +236,8 @@ public class EventDataSource extends DataSource implements EventDao {
     }
 
     private String[] eventColumns() {
-        String[] columns = {Constants.TABLE_EVENTS + "." + Constants.AUTOINCREMETN_COLUMN,
+        String[] columns = {
+                Constants.TABLE_EVENTS + "." + Constants.AUTOINCREMETN_COLUMN,
                 Constants.EVENTS_NAME,
                 Constants.EVENTS_DESCRIPTION,
                 Constants.EVENTS_TICKET_PRICE,
@@ -185,5 +245,34 @@ public class EventDataSource extends DataSource implements EventDao {
                 Constants.TYPES_TYPE,
                 Constants.LOCATIONS_NAME};
         return columns;
+    }
+
+    private Event cursorToEvent(Cursor cursor) {
+        Event event = new Event();
+        event.setEventId(cursor.getLong(cursor.getColumnIndex(Constants.AUTOINCREMETN_COLUMN)));
+        event.setEventName(cursor.getString(cursor.getColumnIndex(Constants.EVENTS_NAME)));
+        event.setEventDescription(cursor.getString(cursor.getColumnIndex(Constants.EVENTS_DESCRIPTION)));
+        event.setEventTicketPrice(cursor.getDouble(cursor.getColumnIndex(Constants.EVENTS_TICKET_PRICE)));
+        event.setEventDate(cursor.getString(cursor.getColumnIndex(Constants.EVENTS_DATE)));
+        event.setEventLocation(cursor.getString(cursor.getColumnIndex(Constants.LOCATIONS_NAME)));
+        event.setEventType(cursor.getString(cursor.getColumnIndex(Constants.TYPES_TYPE)));
+
+        return event;
+    }
+
+    @Override
+    public ArrayList<String> selectAllTypes() {
+        ArrayList<String> allTypes = new ArrayList<>();
+        Cursor cursor = null;
+        String[] columns = {Constants.TYPES_TYPE};
+        cursor = database.query(Constants.TABLE_TYPES, columns, null, null, null, null, null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            String type = cursor.getString(cursor.getColumnIndex(Constants.TYPES_TYPE));
+            allTypes.add(type);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return allTypes;
     }
 }

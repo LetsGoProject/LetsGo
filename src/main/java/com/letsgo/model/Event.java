@@ -117,4 +117,20 @@ public class Event implements Parcelable{
         dest.writeString(this.eventLocation);
         dest.writeString(this.eventType);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Event event = (Event) o;
+
+        return eventName.equals(event.eventName);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return eventName.hashCode();
+    }
 }

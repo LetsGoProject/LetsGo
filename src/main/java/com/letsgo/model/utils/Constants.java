@@ -15,9 +15,7 @@ public class Constants {
     public static final String TABLE_LOCATIONS = "Locations";
     public static final String TABLE_TYPES = "Types";
     public static final String TABLE_USERS = "Users";
-
     public static final String TABLE_EVENTS = "Events";
-
     public static final String TABLE_TICKETS_EVENTS_USERS = "Tickets_Events_Users";
     public static final String TABLE_USERS_FAV_EVENTS = "Users_Favs_Events";
 
@@ -26,6 +24,8 @@ public class Constants {
     public static final String LOCATIONS_NAME = "location_name";
     public static final String LOCATIONS_ADDRESS = "location_address";
     public static final String LOCATIONS_CONTACT = "location_contact";
+    public static final String[] LOCATIONS_ALL_COLUMNS = {AUTOINCREMETN_COLUMN,LOCATIONS_NAME,LOCATIONS_ADDRESS,
+            LOCATIONS_CONTACT};
     //        ----TYPES TABLE----
     public static final String TYPES_TYPE = "type";
     //        -----USERS TABLE----

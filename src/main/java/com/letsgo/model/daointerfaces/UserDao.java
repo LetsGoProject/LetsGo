@@ -3,6 +3,7 @@ package com.letsgo.model.daointerfaces;
 import com.letsgo.model.Event;
 import com.letsgo.model.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,13 +18,13 @@ public interface UserDao {
     boolean editEmail(String email,String newEmail);
     boolean editPassword(String email,String newPassword);
     boolean deleteUser(String email);
-    boolean addEventToWatchlist(String emial,String event_name);
-    boolean removeEventFromWatchlist(String emial,String eventName);
+    boolean addEventToWatchlist(long userId,String event_name);
+    boolean removeEventFromWatchlist(long userId,String eventName);
 
     boolean checkForExisting(String table,String column,String selectionArg);
 
     Event showEventFromWatch(String eventName);
-    List<Event> showWathclist();
+    ArrayList<Event> showWathclist(long userId);
 //    List<User> listAllUsers();
     //    for testing
     String showAllUsers();

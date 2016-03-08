@@ -41,6 +41,7 @@ public class ActivityMain extends AppCompatActivity
         ((UserDataSource)userDataSource).open();
 
         currentUser = getIntent().getParcelableExtra("user");
+        keepUserid(currentUser);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -142,6 +143,8 @@ public class ActivityMain extends AppCompatActivity
 //            Clear shared pref file
             SharedPreferences log = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
             log.edit().clear().commit();
+            SharedPreferences userId = getPreferences(MODE_PRIVATE);
+            userId.edit().clear().commit();
 
             Intent logoutIntent = new Intent(this,ActivityLogin.class);
             startActivity(logoutIntent);
@@ -178,5 +181,20 @@ public class ActivityMain extends AppCompatActivity
     protected void onPause() {
         ((UserDataSource)userDataSource).close();
         super.onPause();
+    }
+
+    private void keepUserid(User user){
+//        TODO save user info (mail)
+        SharedPreferences userId = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = userId.edit();
+        editor.putLong("user_id", user.getId());
+        editor.commit();
+    }
+
+    @Override
+    protected void onStop() {
+        SharedPreferences userId = getPreferences(MODE_PRIVATE);
+        userId.edit().clear().commit();
+        super.onStop();
     }
 }

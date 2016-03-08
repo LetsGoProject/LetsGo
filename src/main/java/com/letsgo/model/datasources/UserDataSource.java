@@ -4,6 +4,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteQueryBuilder;
+import android.util.Log;
 
 import com.letsgo.model.DBHelper;
 import com.letsgo.model.Event;
@@ -11,6 +13,7 @@ import com.letsgo.model.User;
 import com.letsgo.model.daointerfaces.UserDao;
 import com.letsgo.model.utils.Constants;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -177,12 +180,28 @@ public class UserDataSource extends DataSource implements UserDao {
     }
 
     @Override
-    public boolean addEventToWatchlist(String emial, String event_name) {
-        return false;
+    public boolean addEventToWatchlist(long userId, String eventName) {
+//        insert into Constants.TABLE_USERS_FAV_EVENTS (Constants.FKEY_USER_ID,Constants.FKEY_EVENT_ID)
+//        values
+//        (select Constants.TABLE_USERS.Constants.AUTOINCREMETN_COLUMN from Constants.TABLE_USERS where Constants.USERS_EMAIL = email,
+//          select Constants.TABLE_EVENTS.AUTOINCREMETN_COLUMN from Constants.TABLE_EVENTS where Constants.EVENTS_NAME = event_name)
+
+        long eventId = getEventIdByName(eventName);
+
+        ContentValues values = new ContentValues();
+        values.put(Constants.FKEY_USER_ID, userId);
+        values.put(Constants.FKEY_EVENT_ID, eventId);
+
+        long insertedRow = database.insert(Constants.TABLE_USERS_FAV_EVENTS, null, values);
+
+        if (insertedRow < 0)
+            return false;
+        else
+            return true;
     }
 
     @Override
-    public boolean removeEventFromWatchlist(String emial, String eventName) {
+    public boolean removeEventFromWatchlist(long userId, String eventName) {
         return false;
     }
 
@@ -203,15 +222,60 @@ public class UserDataSource extends DataSource implements UserDao {
     }
 
     @Override
-    public List<Event> showWathclist() {
-        return null;
+    public ArrayList<Event> showWathclist(long userId) {
+
+        ArrayList<Event> watchList = new ArrayList<>();
+        String[] args = {String.valueOf(userId)};
+        Cursor cursor = joinFavsEventsLocations().query(database,eventColumns(),Constants.FKEY_USER_ID + " = ? ", args,null,null,null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()){
+            Event event = cursorToEvent(cursor);
+            watchList.add(event);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return watchList;
+    }
+//TODO join types ..
+    private SQLiteQueryBuilder joinFavsEventsLocations() {
+        SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
+        queryBuilder.setTables(Constants.TABLE_USERS_FAV_EVENTS +
+                " join " + Constants.TABLE_EVENTS +
+                " on " + Constants.TABLE_USERS_FAV_EVENTS + "." + Constants.FKEY_EVENT_ID + " = " +
+                Constants.TABLE_EVENTS + "." + Constants.AUTOINCREMETN_COLUMN +
+                " join " + Constants.TABLE_LOCATIONS +
+                " on " + Constants.TABLE_USERS_FAV_EVENTS + "." + Constants.FKEY_EVENT_ID + " = " +
+                Constants.TABLE_LOCATIONS + "." + Constants.AUTOINCREMETN_COLUMN);
+        return queryBuilder;
+    }
+//TODO add types
+    private Event cursorToEvent(Cursor cursor) {
+        Event event = new Event();
+        event.setEventId(cursor.getLong(cursor.getColumnIndex(Constants.AUTOINCREMETN_COLUMN)));
+        event.setEventName(cursor.getString(cursor.getColumnIndex(Constants.EVENTS_NAME)));
+        event.setEventDescription(cursor.getString(cursor.getColumnIndex(Constants.EVENTS_DESCRIPTION)));
+        event.setEventTicketPrice(cursor.getDouble(cursor.getColumnIndex(Constants.EVENTS_TICKET_PRICE)));
+        event.setEventDate(cursor.getString(cursor.getColumnIndex(Constants.EVENTS_DATE)));
+        event.setEventLocation(cursor.getString(cursor.getColumnIndex(Constants.LOCATIONS_NAME)));
+
+        return event;
+    }
+    private String[] eventColumns() {
+        String[] columns = {
+                Constants.TABLE_EVENTS + "." + Constants.AUTOINCREMETN_COLUMN,
+                Constants.EVENTS_NAME,
+                Constants.EVENTS_DESCRIPTION,
+                Constants.EVENTS_TICKET_PRICE,
+                Constants.EVENTS_DATE,
+                Constants.LOCATIONS_NAME};
+        return columns;
     }
 
-//    for testing
+    //    for testing
     @Override
     public String showAllUsers() {
         StringBuffer allUsers = new StringBuffer();
-        String[] columns = {Constants.USERS_NAME, Constants.USERS_EMAIL,Constants.USERS_PASSWORD};
+        String[] columns = {Constants.USERS_NAME, Constants.USERS_EMAIL, Constants.USERS_PASSWORD};
         Cursor cursor = database.query(Constants.TABLE_USERS, columns, null, null, null, null, null);
         while (cursor.moveToNext()) {
             String userName = cursor.getString(cursor.getColumnIndex(Constants.USERS_NAME));
@@ -229,6 +293,7 @@ public class UserDataSource extends DataSource implements UserDao {
         user.setUsername(cursor.getString(cursor.getColumnIndex(Constants.USERS_NAME)));
         user.setEmail(cursor.getString(cursor.getColumnIndex(Constants.USERS_EMAIL)));
         user.setPassword(cursor.getString(cursor.getColumnIndex(Constants.USERS_PASSWORD)));
+
         if (cursor.getInt(cursor.getColumnIndex(Constants.USERS_ISADMIN)) == 1)
             user.setIsAdmin(true);
         else
@@ -237,4 +302,13 @@ public class UserDataSource extends DataSource implements UserDao {
         return user;
     }
 
+    private long getEventIdByName(String eventName) {
+        String[] columns = {Constants.AUTOINCREMETN_COLUMN};
+        String[] eventsSelectArgs = {eventName};
+        Cursor cursor = database.query(Constants.TABLE_EVENTS, columns, Constants.EVENTS_NAME + " = ? ", eventsSelectArgs, null, null, null);
+        cursor.moveToFirst();
+        long eventId = cursor.getLong(cursor.getColumnIndex(Constants.AUTOINCREMETN_COLUMN));
+        cursor.close();
+        return eventId;
+    }
 }

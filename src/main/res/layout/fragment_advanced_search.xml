@@ -12,6 +12,8 @@
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <EditText
+        android:gravity="center"
+        android:background="@drawable/hollow_btn"
         android:id="@+id/search_event_name"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -30,8 +32,9 @@
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <Spinner
+        android:background="@drawable/hollow_btn"
         android:id="@+id/advanced_search_spinner_type"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp"
@@ -44,8 +47,9 @@
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <Spinner
+        android:background="@drawable/hollow_btn"
         android:id="@+id/advanced_search_spinner_location"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp"
@@ -72,13 +76,6 @@
             android:orientation="horizontal">
 
             <RadioButton
-                android:id="@+id/advanced_search_radio_before"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Before" />
-
-            <RadioButton
                 android:id="@+id/advanced_search_radio_after"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -86,12 +83,18 @@
                 android:text="After" />
 
             <RadioButton
-
                 android:id="@+id/advanced_search_radio_between"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Between" />
+
+            <RadioButton
+                android:id="@+id/advanced_search_radio_before"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Before" />
 
         </RadioGroup>
 
@@ -101,18 +104,20 @@
             android:orientation="vertical">
 
             <EditText
+                android:background="@drawable/hollow_btn"
                 android:id="@+id/advanced_search_edt_past"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:inputType="none"
-                android:ems="10"
                 android:cursorVisible="false"
+                android:ems="10"
                 android:gravity="center_horizontal"
+                android:inputType="none"
                 android:maxLength="10"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <EditText
+                android:background="@drawable/hollow_btn"
                 android:id="@+id/advanced_search_edt_future"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -122,6 +127,13 @@
                 android:gravity="center_horizontal"
                 android:maxLength="10"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            <Button
+                android:id="@+id/btn_clear_dates"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Clear dates" />
         </LinearLayout>
     </LinearLayout>
 
@@ -133,11 +145,11 @@
         android:text="Search" />
 
     <Button
-        android:id="@+id/advanced_search_cancel_btn"
+        android:id="@+id/advanced_search_clear_all_btn"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:text="Cancel" />
+        android:text="Clear all" />
 
 
 </LinearLayout>

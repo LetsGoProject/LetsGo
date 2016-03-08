@@ -3,6 +3,7 @@ package com.letsgo.model.daointerfaces;
 import com.letsgo.model.Event;
 import com.letsgo.model.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,8 +22,9 @@ public interface EventDao {
     boolean deleteEvent(String name);
     boolean checkForExisting(String table,String column,String selectionArg);
     List<Event> showEvents(String period);
-    List<Event> showSearchResults(String name,String type,String location,String dateBefore,String dateAfter,String dateFuture,String datepast);
+    List<Event> showSearchResults(String name,String type,String location,String dateBefore,String dateAfter);
 //    TEST DATEPICKER
     List<Event> showSearchResults(String date);
+    ArrayList<String> selectAllTypes();
 
 }
