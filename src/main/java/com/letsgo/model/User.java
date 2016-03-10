@@ -7,9 +7,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-/**
- * Created by Petkata on 24.2.2016 г..
- */
+
 public class User extends Account implements Parcelable{
 
     private long id;

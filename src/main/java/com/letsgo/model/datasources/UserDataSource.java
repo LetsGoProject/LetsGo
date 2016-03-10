@@ -202,7 +202,20 @@ public class UserDataSource extends DataSource implements UserDao {
 
     @Override
     public boolean removeEventFromWatchlist(long userId, String eventName) {
-        return false;
+        long eventId = getEventIdByName(eventName);
+//
+//        ContentValues values = new ContentValues();
+//        values.put(Constants.FKEY_USER_ID, userId);
+//        values.put(Constants.FKEY_EVENT_ID, eventId);
+
+        String[] args = {String.valueOf(userId),String.valueOf(eventId)};
+
+        long deletedRow = database.delete(Constants.TABLE_USERS_FAV_EVENTS, Constants.FKEY_USER_ID + " = ? AND " + Constants.FKEY_EVENT_ID + " = ? ", args);
+
+        if (deletedRow < 0)
+            return false;
+        else
+            return true;
     }
 
     @Override
@@ -225,41 +238,71 @@ public class UserDataSource extends DataSource implements UserDao {
     public ArrayList<Event> showWathclist(long userId) {
 
         ArrayList<Event> watchList = new ArrayList<>();
-        String[] args = {String.valueOf(userId)};
-        Cursor cursor = joinFavsEventsLocations().query(database,eventColumns(),Constants.FKEY_USER_ID + " = ? ", args,null,null,null);
+//        String[] args = {String.valueOf(userId)};
+//        String[] evnameColumn = {Constants.EVENTS_NAME};
+//        Cursor cursorEventName = joinFavsEventsLocations().query(database,evnameColumn,Constants.FKEY_USER_ID + " = ? ", args,null,null,null);
+//        cursorEventName.moveToFirst();
+//        while (!cursorEventName.isAfterLast()){
+//            String name = cursorEventName.getString(cursorEventName.getColumnIndex(Constants.EVENTS_NAME));
+//            Cursor cursor = EventDataSource.joinEventsLocationsTypes().query(database, eventColumns(),Constants.EVENTS_NAME + " = "
+//                    + "'" + name + "'" , null, null, null, null, null);
+////            Cursor cursor = database.query(Constants.TABLE_EVENTS, Constants.EVENTS_ALL_COLUMNS, Constants.EVENTS_NAME + " = "
+////                    + "'" + name + "'", null, null, null, null);
+//            cursor.moveToFirst();
+//            Event event = EventDataSource.cursorToEvent(cursor);
+//            cursor.close();
+//            watchList.add(event);
+//        }
+
+//        Cursor cursor = joinFavsEventsLocations().query(database,eventColumns(),Constants.FKEY_USER_ID + " = ? ", args,null,null,null);
+//        cursor.moveToFirst();
+//        while (!cursor.isAfterLast()){
+//            Event event = EventDataSource.cursorToEvent(cursor);
+//            watchList.add(event);
+//            cursor.moveToNext();
+//        }
+//        cursor.close();
+
+//        String longQuery = "select e._id_pk," +
+//                "event_name," +
+//                "event_description," +
+//                "event_ticket_price," +
+//                "event_date," +
+//                "(select location_name from Events e join Locations loc on e.event_location_" +
+//                "fk = loc._id_pk " +
+//                "where  e._id_pk =(select Users_Favs_Events.event_id_fk from Users_Favs_Events where user_id_fk ="+userId+") ) as "+Constants.LOCATIONS_NAME+"" +
+//                ",(select type from Events e join Types t on e.event_type_fk = t._id_pk " +
+//                "where  e._id_pk =(select Users_Favs_Events.event_id_fk from Users_Favs_Events where user_id_fk ="+userId+") ) as "+Constants.TYPES_TYPE+" " +
+//                "from Users_Favs_Events ufe  " +
+//                "join Events e " +
+//                "on ufe.event_id_fk = e._id_pk " +
+//                "where user_id_fk = "+userId;
+
+        Cursor cursor = database.query(Constants.TABLE_USERS_FAV_EVENTS,new String[]{Constants.FKEY_EVENT_ID},Constants.FKEY_USER_ID + " = ? " , new String[]{String.valueOf(userId)},null,null,null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()){
-            Event event = cursorToEvent(cursor);
+            long eventId = cursor.getLong(cursor.getColumnIndex(Constants.FKEY_EVENT_ID));
+
+            Cursor c = EventDataSource.joinEventsLocationsTypes().query(database, EventDataSource.eventColumns(), Constants.TABLE_EVENTS+"."+Constants.AUTOINCREMETN_COLUMN + " = ? ", new String[]{String.valueOf(eventId)}, null, null, null);
+            c.moveToFirst();
+            Event event = EventDataSource.cursorToEvent(c);
             watchList.add(event);
+            c.close();
             cursor.moveToNext();
         }
         cursor.close();
         return watchList;
     }
-//TODO join types ..
+//TODO join types .. fix Locations
     private SQLiteQueryBuilder joinFavsEventsLocations() {
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
         queryBuilder.setTables(Constants.TABLE_USERS_FAV_EVENTS +
                 " join " + Constants.TABLE_EVENTS +
                 " on " + Constants.TABLE_USERS_FAV_EVENTS + "." + Constants.FKEY_EVENT_ID + " = " +
-                Constants.TABLE_EVENTS + "." + Constants.AUTOINCREMETN_COLUMN +
-                " join " + Constants.TABLE_LOCATIONS +
-                " on " + Constants.TABLE_USERS_FAV_EVENTS + "." + Constants.FKEY_EVENT_ID + " = " +
-                Constants.TABLE_LOCATIONS + "." + Constants.AUTOINCREMETN_COLUMN);
+                Constants.TABLE_EVENTS + "." + Constants.AUTOINCREMETN_COLUMN);
         return queryBuilder;
     }
-//TODO add types
-    private Event cursorToEvent(Cursor cursor) {
-        Event event = new Event();
-        event.setEventId(cursor.getLong(cursor.getColumnIndex(Constants.AUTOINCREMETN_COLUMN)));
-        event.setEventName(cursor.getString(cursor.getColumnIndex(Constants.EVENTS_NAME)));
-        event.setEventDescription(cursor.getString(cursor.getColumnIndex(Constants.EVENTS_DESCRIPTION)));
-        event.setEventTicketPrice(cursor.getDouble(cursor.getColumnIndex(Constants.EVENTS_TICKET_PRICE)));
-        event.setEventDate(cursor.getString(cursor.getColumnIndex(Constants.EVENTS_DATE)));
-        event.setEventLocation(cursor.getString(cursor.getColumnIndex(Constants.LOCATIONS_NAME)));
 
-        return event;
-    }
     private String[] eventColumns() {
         String[] columns = {
                 Constants.TABLE_EVENTS + "." + Constants.AUTOINCREMETN_COLUMN,

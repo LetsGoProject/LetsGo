@@ -77,7 +77,7 @@ public class FragmentSingleEvent extends Fragment {
                 if (!isWatched){
                     isWatched = true;
                     if (userDataSource.addEventToWatchlist(userId,selectedEvent.getEventName())) {
-                        
+
                         fab.setImageResource(android.R.drawable.btn_star_big_on);
                         Snackbar.make(view, "Event added to your watchlist", Snackbar.LENGTH_SHORT)
                                 .setAction("Action", null).show();

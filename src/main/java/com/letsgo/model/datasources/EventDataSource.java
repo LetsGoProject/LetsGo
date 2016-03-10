@@ -62,8 +62,10 @@ public class EventDataSource extends DataSource implements EventDao {
 
     @Override
     public Event showEvent(String name) {
-        Cursor cursor = database.query(Constants.TABLE_EVENTS, Constants.EVENTS_ALL_COLUMNS, Constants.EVENTS_NAME + " = "
-                + "'" + name + "'", null, null, null, null);
+//        Cursor cursor = database.query(Constants.TABLE_EVENTS, Constants.EVENTS_ALL_COLUMNS, Constants.EVENTS_NAME + " = "
+//                + "'" + name + "'", null, null, null, null);
+        Cursor cursor = joinEventsLocationsTypes().query(database, eventColumns(),null, null, null, null, null, null);
+
         cursor.moveToFirst();
         Event event = cursorToEvent(cursor);
         cursor.close();
@@ -226,7 +228,7 @@ public class EventDataSource extends DataSource implements EventDao {
         return allEvents;
     }
 
-    private SQLiteQueryBuilder joinEventsLocationsTypes() {
+    public static SQLiteQueryBuilder joinEventsLocationsTypes() {
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
         queryBuilder.setTables(Constants.TABLE_EVENTS + " join " + Constants.TABLE_TYPES + " on " + Constants.TABLE_EVENTS + "." + Constants.EVENTS_TYPE + " = " +
                 Constants.TABLE_TYPES + "." + Constants.AUTOINCREMETN_COLUMN +
@@ -235,7 +237,7 @@ public class EventDataSource extends DataSource implements EventDao {
         return queryBuilder;
     }
 
-    private String[] eventColumns() {
+    public static String[] eventColumns() {
         String[] columns = {
                 Constants.TABLE_EVENTS + "." + Constants.AUTOINCREMETN_COLUMN,
                 Constants.EVENTS_NAME,
@@ -247,7 +249,7 @@ public class EventDataSource extends DataSource implements EventDao {
         return columns;
     }
 
-    private Event cursorToEvent(Cursor cursor) {
+    public static Event cursorToEvent(Cursor cursor) {
         Event event = new Event();
         event.setEventId(cursor.getLong(cursor.getColumnIndex(Constants.AUTOINCREMETN_COLUMN)));
         event.setEventName(cursor.getString(cursor.getColumnIndex(Constants.EVENTS_NAME)));
