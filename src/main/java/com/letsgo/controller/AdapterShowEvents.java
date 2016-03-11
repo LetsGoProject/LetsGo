@@ -1,7 +1,9 @@
 package com.letsgo.controller;
 
+import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +23,9 @@ import java.util.List;
  * Created by Petkata on 5.3.2016 г..
  */
 public class AdapterShowEvents extends ArrayAdapter<Event> {
+
+
+    long userId;
 
     private class CustomViewHolder{
         private TextView eventName;
@@ -44,13 +49,17 @@ public class AdapterShowEvents extends ArrayAdapter<Event> {
 
 
     public AdapterShowEvents(Context context, ArrayList<Event> events){
-        super(context,R.layout.event_list_element,events);
+        super(context, R.layout.event_list_element, events);
+
+        SharedPreferences getUserId = ((Activity) context).getPreferences(Context.MODE_PRIVATE);
+        userId = getUserId.getLong("user_id", -1);
+
         eventDataSource = new EventDataSource(getContext());
         ((EventDataSource)eventDataSource).open();
         this.context = context;
         this.events = events;
         listEventIds = new ArrayList<>();
-        listEventIds = eventDataSource.selectAllFavEventsIds();
+        listEventIds = eventDataSource.selectAllFavEventsIdsForUserId(userId);
         ((EventDataSource)eventDataSource).close();
     }
 

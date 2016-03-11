@@ -20,6 +20,7 @@ public interface UserDao {
     boolean deleteUser(String email);
     boolean addEventToWatchlist(long userId,String event_name);
     boolean removeEventFromWatchlist(long userId,String eventName);
+    boolean removeAllFromWatchlist(long userId);
 
     boolean checkForExisting(String table,String column,String selectionArg);
 

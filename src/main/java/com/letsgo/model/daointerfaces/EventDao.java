@@ -25,7 +25,7 @@ public interface EventDao {
     List<Event> showEvents(String period);
     List<Event> showSearchResults(String name,String type,String location,String dateBefore,String dateAfter);
 
-    List<Long> selectAllFavEventsIds();
+    List<Long> selectAllFavEventsIdsForUserId(long userId);
 
     List<Event> showSearchResults(String date);
     ArrayList<String> selectAllTypes();

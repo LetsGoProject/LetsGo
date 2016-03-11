@@ -178,9 +178,11 @@ public class EventDataSource extends DataSource implements EventDao {
     }
 
     @Override
-    public List<Long> selectAllFavEventsIds() {
+    public List<Long> selectAllFavEventsIdsForUserId(long userId) {
         List<Long> listIds = new ArrayList<>();
-        Cursor cursor = database.query(Constants.TABLE_USERS_FAV_EVENTS,new String[]{Constants.FKEY_EVENT_ID},null,null,null,null,null);
+        String select = Constants.FKEY_USER_ID  + " = ? ";
+        String[] args = {String.valueOf(userId)};
+        Cursor cursor = database.query(Constants.TABLE_USERS_FAV_EVENTS,new String[]{Constants.FKEY_EVENT_ID},select,args,null,null,null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()){
             long id = cursor.getLong(cursor.getColumnIndex(Constants.FKEY_EVENT_ID));

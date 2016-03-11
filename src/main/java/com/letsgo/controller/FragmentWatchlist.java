@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -30,6 +31,8 @@ public class FragmentWatchlist extends Fragment {
     ListView listWatchList;
     UserDao userDataSource;
     long userId;
+    Button clearWatchlist;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,7 +58,7 @@ public class FragmentWatchlist extends Fragment {
 
                 AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
                 adb.setTitle("Delete?");
-                adb.setMessage("Are you sure you want to remove " + eventName + " from Watchlist?" );
+                adb.setMessage("Are you sure you want to remove " + eventName + " from Watchlist?");
                 adb.setNegativeButton("Cancel", null);
                 adb.setPositiveButton("Ok", new AlertDialog.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
@@ -70,7 +73,27 @@ public class FragmentWatchlist extends Fragment {
             }
         });
 
+        clearWatchlist = (Button) view.findViewById(R.id.btn_clear_all_watchlist);
+        clearWatchlist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
+                adb.setTitle("Delete?");
+                adb.setMessage("Are you sure you want to remove all from Watchlist?");
+                adb.setNegativeButton("Cancel", null);
+                adb.setPositiveButton("Ok", new AlertDialog.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        userDataSource.removeAllFromWatchlist(userId);
+
+                        watchlistData.clear();
+                        adapterWatchlist.notifyDataSetChanged();
+                    }
+                });
+                adb.show();
+            }
+        });
         return view;
     }
     @Override

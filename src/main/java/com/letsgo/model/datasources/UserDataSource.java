@@ -219,6 +219,19 @@ public class UserDataSource extends DataSource implements UserDao {
     }
 
     @Override
+    public boolean removeAllFromWatchlist(long userId) {
+
+        String[] args = {String.valueOf(userId)};
+
+        long deletedRow = database.delete(Constants.TABLE_USERS_FAV_EVENTS, Constants.FKEY_USER_ID + " = ? ", args);
+
+        if (deletedRow < 0)
+            return false;
+        else
+            return true;
+    }
+
+    @Override
     public boolean checkForExisting(String table, String column, String selectionArg) {
         String[] columns = {column};
         String[] selectionArgs = {selectionArg};
