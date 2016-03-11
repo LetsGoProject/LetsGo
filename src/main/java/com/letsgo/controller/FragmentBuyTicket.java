@@ -17,24 +17,12 @@ import com.letsgo.model.Event;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentBuyTicket extends Fragment {
+public class FragmentBuyTicket extends AbstractFragment {
 
     Event event;
     int quantity;
     double price;
     double total;
-
-    public FragmentBuyTicket() {
-        // Required empty public constructor
-    }
-
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        event = getArguments().getParcelable("current_event");
-        super.onCreate(savedInstanceState);
-    }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -97,17 +85,21 @@ public class FragmentBuyTicket extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentManager fm = getFragmentManager();
-                FragmentTransaction ft = fm.beginTransaction();
-                ft.replace(R.id.frag_container,getFragmentManager().findFragmentByTag("singleEvent"));
-                ft.addToBackStack(null);
-                ft.commit();
+                getActivity().onBackPressed();
+//                fm.popBackStack();
             }
         });
         return view;
     }
 
+
+
     double calcTotalPrice(int quant){
         return price*quant;
     }
 
+    @Override
+    public void getEvent(Event e, boolean isFav) {
+        event = e;
+    }
 }

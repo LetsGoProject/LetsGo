@@ -1,6 +1,7 @@
 package com.letsgo.controller;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ListView;
 
 import com.letsgo.R;
@@ -24,28 +26,37 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentSearchResults extends Fragment {
+public class FragmentSearchResults extends AbstractFragment {
 
-//    TODO on refine search click send code to not clear fields
     String eventName;
     String eventType;
     String eventLocation;
     String afterDate;
     String beforeDate;
 
+    Communicator rootContext;
+
     EventDao eventDataSource;
     ListView listSearchresults;
 
     Button btnRefineSearch;
+    Button btnNewSearch;
+
+    @Override
+    public void onAttach(Context context) {
+        rootContext = (Communicator) context;
+        super.onAttach(context);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
-        eventName = (String) getArguments().get("event_name");
-        eventType = (String) getArguments().get("event_type");
-        eventLocation = (String) getArguments().get("event_location");
-        afterDate = (String) getArguments().get("afterDate");
-        beforeDate = (String) getArguments().get("beforeDate");
+        if (eventName == null && savedInstanceState != null) {
+            eventName = savedInstanceState.getString("name");
+            eventType = savedInstanceState.getString("type");
+            eventLocation = savedInstanceState.getString("location");
+            afterDate = savedInstanceState.getString("after");
+            beforeDate = savedInstanceState.getString("before");
+        }
         super.onCreate(savedInstanceState);
     }
 
@@ -57,25 +68,38 @@ public class FragmentSearchResults extends Fragment {
         eventDataSource = new EventDataSource(getContext());
         ((EventDataSource)eventDataSource).open();
 
-        final List<Event> searchResults = eventDataSource.showSearchResults(eventName,eventType,eventLocation,afterDate,beforeDate);
+        final List<Event> searchResultsDataSource = eventDataSource.showSearchResults(eventName,eventType,eventLocation,afterDate,beforeDate);
         listSearchresults = (ListView) view.findViewById(R.id.search_result);
 
-        ArrayAdapter<Event> searchAdapter = new AdapterShowEvents(getContext(),(ArrayList<Event>)searchResults);
+        ArrayAdapter<Event> searchAdapter = new AdapterShowEvents(getContext(),(ArrayList<Event>)searchResultsDataSource);
         listSearchresults.setAdapter(searchAdapter);
 
         listSearchresults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//               LoadSingleEventFragment.load(getFragmentManager(),searchResultsDataSource,position,view);
+                CheckBox isFav = (CheckBox) view.findViewById(R.id.is_in_fav);
+                if (getActivity().findViewById(R.id.land_frag_container) != null) {
+                    getActivity().findViewById(R.id.frag_container).setVisibility(View.GONE);
+                    getActivity().findViewById(R.id.land_frag_ticket).setVisibility(View.VISIBLE);
+                }
+                rootContext.sendEvent(new FragmentSingleEvent(), searchResultsDataSource.get(position), isFav.isChecked());
+
+            }
+        });
+
+        btnNewSearch = (Button) view.findViewById(R.id.new_search);
+        btnNewSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getActivity().findViewById(R.id.land_frag_ticket) != null) {
+                    getActivity().findViewById(R.id.land_frag_ticket).setVisibility(View.GONE);
+                    getActivity().findViewById(R.id.frag_container).setVisibility(View.VISIBLE);
+                }
                 FragmentManager fm = getFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
-//                Put event object in called fragment
-                FragmentSingleEvent sef = new FragmentSingleEvent();
-                Bundle bundle = new Bundle();
-                bundle.putParcelable("selected_event", searchResults.get(position));
-                sef.setArguments(bundle);
-
-                ft.replace(R.id.frag_container, sef, "singleEvent");
-                ft.addToBackStack(null);
+                Fragment advancedSearch = new FragmentAdvancedSearch();
+                ft.replace(R.id.frag_container, advancedSearch);
                 ft.commit();
             }
         });
@@ -85,10 +109,7 @@ public class FragmentSearchResults extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentManager fm = getFragmentManager();
-                FragmentTransaction ft = fm.beginTransaction();
-                Fragment advancedSearch = new FragmentAdvancedSearch();
-                ft.replace(R.id.frag_container,advancedSearch);
-                ft.commit();
+                fm.popBackStack();
             }
         });
 
@@ -104,5 +125,24 @@ public class FragmentSearchResults extends Fragment {
     public void onPause() {
         ((EventDataSource)eventDataSource).close();
         super.onPause();
+    }
+
+    @Override
+    public void getSearchCriteria(String eventName, String eventType, String eventLocation, String afterDate, String beforeDate) {
+        this.eventName = eventName;
+        this.eventType = eventType;
+        this.eventLocation = eventLocation;
+        this.afterDate =afterDate;
+        this.beforeDate = beforeDate;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putString("name",this.eventName);
+        outState.putString("type",this.eventType);
+        outState.putString("location",this.eventLocation);
+        outState.putString("after",this.afterDate);
+        outState.putString("before",this.beforeDate);
+        super.onSaveInstanceState(outState);
     }
 }

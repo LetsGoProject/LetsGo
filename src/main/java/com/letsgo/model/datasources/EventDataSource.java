@@ -135,11 +135,11 @@ public class EventDataSource extends DataSource implements EventDao {
     @Override
     public List<Event> showSearchResults(String name, String type, String location, String dateAfter, String dateBefore) {
 
-        List<Event> nameSearchResults = new ArrayList<>();
-        List<Event> typeSearchResults = new ArrayList<>();
-        List<Event> locationSearchResults = new ArrayList<>();
-        List<Event> dateAfterSearchResults = new ArrayList<>();
-        List<Event> dateBeforeSearchResults = new ArrayList<>();
+        List<Event> nameSearchResults;
+        List<Event> typeSearchResults;
+        List<Event> locationSearchResults;
+        List<Event> dateAfterSearchResults;
+        List<Event> dateBeforeSearchResults;
 
         if(name.length() > 0)
             nameSearchResults = results("%"+name+"%", Constants.EVENTS_NAME, "like");
@@ -175,6 +175,20 @@ public class EventDataSource extends DataSource implements EventDao {
         nameSearchResults.retainAll(dateBeforeSearchResults);
 
         return nameSearchResults;
+    }
+
+    @Override
+    public List<Long> selectAllFavEventsIds() {
+        List<Long> listIds = new ArrayList<>();
+        Cursor cursor = database.query(Constants.TABLE_USERS_FAV_EVENTS,new String[]{Constants.FKEY_EVENT_ID},null,null,null,null,null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()){
+            long id = cursor.getLong(cursor.getColumnIndex(Constants.FKEY_EVENT_ID));
+            listIds.add(id);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return listIds;
     }
 
     @Override

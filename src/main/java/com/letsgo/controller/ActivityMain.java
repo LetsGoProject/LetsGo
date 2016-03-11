@@ -7,6 +7,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -16,15 +17,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.letsgo.R;
+import com.letsgo.model.Event;
 import com.letsgo.model.User;
 import com.letsgo.model.daointerfaces.UserDao;
 import com.letsgo.model.datasources.UserDataSource;
 
 public class ActivityMain extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener,Communicator {
 
 //    TODO decide if backStack should be more than one step
 
@@ -77,6 +80,11 @@ public class ActivityMain extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+        }
+        View ticktetContainer = findViewById(R.id.land_frag_ticket);
+        if (ticktetContainer != null && ticktetContainer.getVisibility() == View.VISIBLE){
+            ticktetContainer.setVisibility(View.GONE);
+            findViewById(R.id.frag_container).setVisibility(View.VISIBLE);
         }
     }
 
@@ -196,5 +204,41 @@ public class ActivityMain extends AppCompatActivity
         SharedPreferences userId = getPreferences(MODE_PRIVATE);
         userId.edit().clear().commit();
         super.onStop();
+    }
+
+    @Override
+    public void sendEvent(AbstractFragment receiver,Event event,boolean isFav) {
+//        LoadSingleEventFragment.sendEventToSingleEventFragment(ActivityMain.this.getSupportFragmentManager(),event,fragment,isFav);
+        receiver.getEvent(event, isFav);
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction tr = fm.beginTransaction();
+        View ticktetContainer = findViewById(R.id.land_frag_ticket);
+        if (ticktetContainer != null && ticktetContainer.getVisibility() == View.VISIBLE){
+            tr.replace(R.id.land_frag_ticket, receiver);
+        }
+        else if (findViewById(R.id.land_frag_container) != null)
+            tr.replace(R.id.land_frag_container, receiver);
+        else
+            tr.replace(R.id.frag_container, receiver);
+        tr.addToBackStack(null);
+        tr.commit();
+    }
+
+    @Override
+    public void sendSearchCriteria(AbstractFragment receiver, String eventName, String eventType,
+                                   String eventLocation, String afterDate, String beforeDate) {
+        receiver.getSearchCriteria(eventName,eventType,eventLocation,afterDate,beforeDate);
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction tr = fm.beginTransaction();
+        View ticktetContainer = findViewById(R.id.land_frag_ticket);
+        if (ticktetContainer != null && ticktetContainer.getVisibility() == View.VISIBLE){
+            tr.replace(R.id.land_frag_ticket, receiver);
+        }
+        else if (findViewById(R.id.land_frag_container) != null)
+            tr.replace(R.id.land_frag_container, receiver);
+        else
+            tr.replace(R.id.frag_container, receiver);
+        tr.addToBackStack(null);
+        tr.commit();
     }
 }

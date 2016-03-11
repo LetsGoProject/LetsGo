@@ -21,9 +21,12 @@ public interface EventDao {
     boolean editEventType(String name,String newType);
     boolean deleteEvent(String name);
     boolean checkForExisting(String table,String column,String selectionArg);
+
     List<Event> showEvents(String period);
     List<Event> showSearchResults(String name,String type,String location,String dateBefore,String dateAfter);
-//    TEST DATEPICKER
+
+    List<Long> selectAllFavEventsIds();
+
     List<Event> showSearchResults(String date);
     ArrayList<String> selectAllTypes();
 

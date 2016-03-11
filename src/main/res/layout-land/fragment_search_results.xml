@@ -25,11 +25,12 @@
         android:id="@+id/new_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/refine_search"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:text="new search" />
 
     <Button
+        android:visibility="invisible"
         android:id="@+id/refine_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

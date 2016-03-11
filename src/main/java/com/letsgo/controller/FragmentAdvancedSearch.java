@@ -3,6 +3,7 @@ package com.letsgo.controller;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -52,6 +53,14 @@ public class FragmentAdvancedSearch extends Fragment {
     Button search;
     Button btnClearAll;
 
+    Communicator rootContext;
+
+    @Override
+    public void onAttach(Context context) {
+        this.rootContext = (Communicator) context;
+        super.onAttach(context);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -83,8 +92,8 @@ public class FragmentAdvancedSearch extends Fragment {
         edtFutureDate = (EditText) view.findViewById(R.id.advanced_search_edt_future);
         edtPastDate = (EditText) view.findViewById(R.id.advanced_search_edt_past);
 
-        edtFutureDate.setVisibility(View.GONE);
-        edtPastDate.setVisibility(View.GONE);
+        edtFutureDate.setVisibility(View.INVISIBLE);
+        edtPastDate.setVisibility(View.INVISIBLE);
 
         btnClearDates = (Button) view.findViewById(R.id.btn_clear_dates);
         btnClearDates.setVisibility(View.INVISIBLE);
@@ -103,25 +112,22 @@ public class FragmentAdvancedSearch extends Fragment {
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentManager fm = getFragmentManager();
-                FragmentTransaction ft = fm.beginTransaction();
-                Fragment searchResults = new FragmentSearchResults();
-                Bundle bundle = new Bundle();
-                bundle.putString("event_name", edtEventName.getText().toString());
-                bundle.putString("event_type", spinnerEventType.getSelectedItem().toString());
-                bundle.putString("event_location", spinnerEventLocation.getSelectedItem().toString());
+
+                String eventName = edtEventName.getText().toString();
+                String eventType = spinnerEventType.getSelectedItem().toString();
+                String eventLocation = spinnerEventLocation.getSelectedItem().toString();
+                String after = "";
+                String before= "";
                 if (radioAfterDate.isChecked())
-                    bundle.putString("afterDate", edtFutureDate.getText().toString());
+                    after = edtFutureDate.getText().toString();
                 else if (radioBeforeDate.isChecked())
-                    bundle.putString("beforeDate", edtFutureDate.getText().toString());
+                    before = edtFutureDate.getText().toString();
                 else {
-                    bundle.putString("afterDate", edtPastDate.getText().toString());
-                    bundle.putString("beforeDate", edtFutureDate.getText().toString());
+                    after = edtPastDate.getText().toString();
+                    before = edtFutureDate.getText().toString();
                 }
-                searchResults.setArguments(bundle);
-                ft.replace(R.id.frag_container, searchResults, "search_results");
-                ft.addToBackStack(null);
-                ft.commit();
+                rootContext.sendSearchCriteria(new FragmentSearchResults(),eventName,eventType,eventLocation,after,before);
+
             }
         });
 
@@ -147,9 +153,9 @@ public class FragmentAdvancedSearch extends Fragment {
         edtFutureDate.setText("");
         edtPastDate.setText("");
 
-        btnClearDates.setVisibility(View.GONE);
-        edtFutureDate.setVisibility(View.GONE);
-        edtPastDate.setVisibility(View.GONE);
+        btnClearDates.setVisibility(View.INVISIBLE);
+        edtFutureDate.setVisibility(View.INVISIBLE);
+        edtPastDate.setVisibility(View.INVISIBLE);
 
         radioAfterDate.setChecked(false);
         radioBetweenDates.setChecked(false);
@@ -186,7 +192,7 @@ public class FragmentAdvancedSearch extends Fragment {
                         edt.setText("");
                     }
                     if (edts.length > 1)
-                        edts[1].setVisibility(View.GONE);
+                        edts[1].setVisibility(View.INVISIBLE);
                 }
             }
         });
