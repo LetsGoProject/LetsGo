@@ -1,9 +1,8 @@
-package com.letsgo.controller;
+package com.letsgo.controller.adapters;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +11,7 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.letsgo.R;
+import com.letsgo.controller.DateFormater;
 import com.letsgo.model.Event;
 import com.letsgo.model.daointerfaces.EventDao;
 import com.letsgo.model.datasources.EventDataSource;
@@ -92,7 +92,7 @@ public class AdapterShowEvents extends ArrayAdapter<Event> {
             holder.isInFavs.setChecked(true);
         }
         holder.eventName.setText(events.get(position).getEventName());
-        holder.eventDate.setText(events.get(position).getEventDate());
+        holder.eventDate.setText(DateFormater.from_yyyyMMdd_To_dMMMyyyy(events.get(position).getEventDate()));
         holder.eventLocation.setText(events.get(position).getEventLocation());
         return row;
     }

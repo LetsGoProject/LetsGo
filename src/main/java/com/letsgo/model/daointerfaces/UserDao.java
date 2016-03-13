@@ -13,21 +13,30 @@ import java.util.Map;
 public interface UserDao {
 
     boolean loginUser(String email, String password);
+
     User createUser(String username,String email, String password);
+
     User showUser(String email);
+
     boolean editUsername(String email,String newUsername);
     boolean editEmail(String email,String newEmail);
     boolean editPassword(String email,String newPassword);
     boolean deleteUser(String email);
-    boolean addEventToWatchlist(long userId,String event_name);
+
+    boolean addEventToWatchlist(long userId,String eventName);
+
     boolean removeEventFromWatchlist(long userId,String eventName);
+
     boolean removeAllFromWatchlist(long userId);
-    boolean buyTicket(long userId,long eventId,int quantity);
-    Map<Event,Integer> selectTicketsForUser (long userId);
+
+    boolean buyTicket(String date,long userId,long eventId,int quantity);
+
+    ArrayList<Map <String,Map<Event,Integer>>> selectTicketsForUser (long userId);
 
     boolean checkForExisting(String table,String column,String selectionArg);
 
     Event showEventFromWatch(String eventName);
+
     ArrayList<Event> showWathclist(long userId);
 //    List<User> listAllUsers();
     //    for testing

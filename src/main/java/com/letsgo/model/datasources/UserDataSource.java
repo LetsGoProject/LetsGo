@@ -234,11 +234,12 @@ public class UserDataSource extends DataSource implements UserDao {
     }
 
     @Override
-    public boolean buyTicket(long userId, long eventId, int quantity) {
+    public boolean buyTicket(String date,long userId, long eventId, int quantity) {
 
         ContentValues values = new ContentValues();
-        values.put(Constants.FKEY_USER_ID, userId);
+        values.put(Constants.TICKET_PURCHASE_DATE,date);
         values.put(Constants.FKEY_EVENT_ID, eventId);
+        values.put(Constants.FKEY_USER_ID, userId);
         values.put(Constants.TICKET_QUANTITY, quantity);
         long insertedRow = database.insert(Constants.TABLE_TICKETS_EVENTS_USERS, null, values);
         if (insertedRow < 0)
@@ -248,7 +249,7 @@ public class UserDataSource extends DataSource implements UserDao {
     }
 
     @Override
-    public Map<Event,Integer> selectTicketsForUser(long userId) {
+    public ArrayList<Map <String,Map<Event,Integer>>> selectTicketsForUser(long userId) {
 
         /**
          * select Constants.EVENTS_NAME,Constants.EVENTS_DATE,Constants.TICKET_QUANTITY
@@ -258,9 +259,9 @@ public class UserDataSource extends DataSource implements UserDao {
          * where teu.FKEY_USER_ID = userid
          */
 
-        Map<Event,Integer> bindEventsTickets = new HashMap<>();
+        ArrayList<Map <String,Map<Event,Integer>>> bindEventsTickets = new ArrayList<>();
 
-        String[] columns = {Constants.EVENTS_NAME,Constants.EVENTS_DATE,Constants.TICKET_QUANTITY};
+        String[] columns = {Constants.TICKET_PURCHASE_DATE,Constants.EVENTS_NAME,Constants.EVENTS_DATE,Constants.TICKET_QUANTITY};
         String selection = Constants.FKEY_USER_ID + " = ? ";
         String[] args = {String.valueOf(userId)};
 
@@ -273,10 +274,18 @@ public class UserDataSource extends DataSource implements UserDao {
         Cursor cursor = queryBuilder.query(database,columns,selection,args,null,null,null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
+            String dateOfPurchase = cursor.getString(cursor.getColumnIndex(Constants.TICKET_PURCHASE_DATE));
             Event event = new Event();
             event.setEventName(cursor.getString(cursor.getColumnIndex(Constants.EVENTS_NAME)));
             event.setEventDate(cursor.getString(cursor.getColumnIndex(Constants.EVENTS_DATE)));
-            bindEventsTickets.put(event, cursor.getInt(cursor.getColumnIndex(Constants.TICKET_QUANTITY)));
+
+            Map<Event,Integer> eventTicketEntry = new HashMap<>();
+            eventTicketEntry.put(event, cursor.getInt(cursor.getColumnIndex(Constants.TICKET_QUANTITY)));
+
+            Map <String,Map<Event,Integer>> dateEventQuantity = new HashMap<>();
+            dateEventQuantity.put(dateOfPurchase,eventTicketEntry);
+
+            bindEventsTickets.add(dateEventQuantity);
             cursor.moveToNext();
         }
         cursor.close();

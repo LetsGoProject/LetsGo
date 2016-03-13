@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +18,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.letsgo.R;
+import com.letsgo.controller.adapters.AdapterShowEvents;
 import com.letsgo.model.Event;
 import com.letsgo.model.daointerfaces.UserDao;
 import com.letsgo.model.datasources.UserDataSource;

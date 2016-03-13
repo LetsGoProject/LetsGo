@@ -6,8 +6,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,7 +61,7 @@ public class FragmentSingleEvent extends AbstractFragment {
         TextView eventPrice = (TextView) view.findViewById(R.id.single_event_ticket_price);
 
         eventName.setText(selectedEvent.getEventName());
-        eventDate.setText(selectedEvent.getEventDate());
+        eventDate.setText(DateFormater.from_yyyyMMdd_To_dMMMyyyy(selectedEvent.getEventDate()));
         eventLocation.setText(selectedEvent.getEventLocation());
         eventDescription.setText(selectedEvent.getEventDescription());
         eventPrice.setText(String.valueOf(selectedEvent.getEventTicketPrice()));
@@ -131,10 +129,9 @@ public class FragmentSingleEvent extends AbstractFragment {
     private void checkIfExpired(String date) {
 
         Calendar c = Calendar.getInstance();
-
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-DD");
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         String formattedDate = df.format(c.getTime());
-        if (date.compareToIgnoreCase(formattedDate) < 0) {
+        if (DateFormater.from_dMMMyyyy_To_yyyyMMdd(date).compareToIgnoreCase(formattedDate) < 0) {
             btnBuyTicket.setText("Expired");
             btnBuyTicket.setClickable(false);
             fab.setVisibility(View.GONE);

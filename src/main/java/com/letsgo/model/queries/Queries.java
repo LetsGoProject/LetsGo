@@ -31,8 +31,9 @@ public class Queries {
             Constants.EVENTS_TYPE + " INT NOT NULL REFERENCES " + Constants.TABLE_TYPES + "(" + Constants.AUTOINCREMETN_COLUMN + ")" +
             ")";
     public static final String CREATE_TABLE_TICKETS_EVENTS_USERS = "CREATE TABLE IF NOT EXISTS " + Constants.TABLE_TICKETS_EVENTS_USERS + "(" +
-            Constants.FKEY_EVENT_ID + " INT NOT NULL REFERENCES " + Constants.TABLE_EVENTS + "(" + Constants.AUTOINCREMETN_COLUMN + ")," +
+            Constants.TICKET_PURCHASE_DATE + " datetime NOT NULL," +
             Constants.FKEY_USER_ID + " INT NOT NULL REFERENCES " + Constants.TABLE_USERS + "(" + Constants.AUTOINCREMETN_COLUMN + ")," +
+            Constants.FKEY_EVENT_ID + " INT NOT NULL REFERENCES " + Constants.TABLE_EVENTS + "(" + Constants.AUTOINCREMETN_COLUMN + ")," +
             Constants.TICKET_QUANTITY + " INT NOT NULL " +
             ")";
     public static final String CREATE_TABLE_USERS_FAV_EVENTS = "CREATE TABLE IF NOT EXISTS " + Constants.TABLE_USERS_FAV_EVENTS + "(" +

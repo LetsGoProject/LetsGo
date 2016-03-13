@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +16,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.letsgo.R;
+import com.letsgo.controller.dialogs.SuccessDialog;
 import com.letsgo.model.Event;
 import com.letsgo.model.daointerfaces.UserDao;
 import com.letsgo.model.datasources.UserDataSource;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -39,7 +44,7 @@ public class FragmentBuyTicket extends AbstractFragment {
         View view = inflater.inflate(R.layout.fragment_buy_ticket, container, false);
 
         userDataSource = new UserDataSource(getContext());
-        ((UserDataSource)userDataSource).open();
+        ((UserDataSource) userDataSource).open();
         SharedPreferences getUserId = getActivity().getPreferences(Context.MODE_PRIVATE);
         userId = getUserId.getLong("user_id", -1);
 
@@ -75,7 +80,7 @@ public class FragmentBuyTicket extends AbstractFragment {
         remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (quantity>0)
+                if (quantity > 0)
                     ticketQuan.setText(String.valueOf(--quantity));
                 totalPrice.setText(String.valueOf(calcTotalPrice(quantity)));
             }
@@ -90,9 +95,20 @@ public class FragmentBuyTicket extends AbstractFragment {
                                     select AUTOINCREMETN_COLUMN from TABLE_USERS where USERS_EMAIL = user.getEmail()
                                      )
 */
-                if (userDataSource.buyTicket(userId,event.getEventId(),Integer.valueOf(ticketQuan.getText().toString())))
-                    Toast.makeText(getContext(), "YEI", Toast.LENGTH_SHORT).show();
-
+                if (quantity<=0){
+                    Toast.makeText(getContext(), "Must buy at least 1 ticket", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Calendar c = Calendar.getInstance();
+                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String formattedDate = df.format(c.getTime());
+                if (userDataSource.buyTicket(formattedDate, userId, event.getEventId(), quantity)) {
+//                    TODO MAKE DIALOG HERE
+                    SuccessDialog successDialog = new SuccessDialog();
+                    successDialog.getData(event.getEventName(),String.valueOf(quantity));
+                    successDialog.show(getFragmentManager(),"success");
+                    Toast.makeText(getContext(), "SUCCESS", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -109,9 +125,8 @@ public class FragmentBuyTicket extends AbstractFragment {
     }
 
 
-
-    double calcTotalPrice(int quant){
-        return price*quant;
+    double calcTotalPrice(int quant) {
+        return price * quant;
     }
 
     @Override

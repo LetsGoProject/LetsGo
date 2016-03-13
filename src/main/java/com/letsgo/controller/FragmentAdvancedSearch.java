@@ -7,9 +7,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -119,12 +116,12 @@ public class FragmentAdvancedSearch extends Fragment {
                 String after = "";
                 String before= "";
                 if (radioAfterDate.isChecked())
-                    after = edtFutureDate.getText().toString();
+                    after = DateFormater.from_dMMMyyyy_To_yyyyMMdd(edtFutureDate.getText().toString());
                 else if (radioBeforeDate.isChecked())
-                    before = edtFutureDate.getText().toString();
+                    before = DateFormater.from_dMMMyyyy_To_yyyyMMdd(edtFutureDate.getText().toString());
                 else {
-                    after = edtPastDate.getText().toString();
-                    before = edtFutureDate.getText().toString();
+                    after = DateFormater.from_dMMMyyyy_To_yyyyMMdd(edtPastDate.getText().toString());
+                    before = DateFormater.from_dMMMyyyy_To_yyyyMMdd(edtFutureDate.getText().toString());
                 }
                 rootContext.sendSearchCriteria(new FragmentSearchResults(),eventName,eventType,eventLocation,after,before);
 
@@ -218,7 +215,7 @@ public class FragmentAdvancedSearch extends Fragment {
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 monthOfYear++;
                 String date = year + "-" + ((monthOfYear < 10) ? "0" : "") + monthOfYear + "-" + ((dayOfMonth < 10) ? "0" : "") + dayOfMonth;
-                edt.setText(date);
+                edt.setText(DateFormater.from_yyyyMMdd_To_dMMMyyyy(date));
             }
         }
         edt.setKeyListener(null);

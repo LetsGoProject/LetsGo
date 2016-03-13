@@ -5,16 +5,20 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.letsgo.R;
+import com.letsgo.controller.adapters.AdapterShowTickets;
 import com.letsgo.model.Event;
 import com.letsgo.model.daointerfaces.UserDao;
 import com.letsgo.model.datasources.UserDataSource;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 /**
@@ -24,6 +28,7 @@ public class FragmentTickets extends Fragment {
 
     UserDao userDataSource;
     long userId;
+    RecyclerView recyclerView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,9 +42,14 @@ public class FragmentTickets extends Fragment {
         SharedPreferences getUserId = getActivity().getPreferences(Context.MODE_PRIVATE);
         userId = getUserId.getLong("user_id", -1);
 
-        Map<Event,Integer> bindedEventsTickets = userDataSource.selectTicketsForUser(userId);
+        ArrayList<Map <String,Map<Event,Integer>>> bindedEventsTickets = userDataSource.selectTicketsForUser(userId);
 
-        Log.i("USER TICKTEST", bindedEventsTickets.toString());
+        recyclerView  = (RecyclerView) v.findViewById(R.id.recycler_view_tickets);
+
+        AdapterShowTickets adapterShowTickets = new AdapterShowTickets(getActivity(),bindedEventsTickets);
+
+        recyclerView.setAdapter(adapterShowTickets);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         return v;
     }

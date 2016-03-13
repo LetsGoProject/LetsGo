@@ -40,6 +40,8 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 //            TODO what is best here ?
+        db.execSQL("DROP TABLE IF EXISTS " + Constants.TABLE_TICKETS_EVENTS_USERS);
+        db.execSQL(Queries.CREATE_TABLE_TICKETS_EVENTS_USERS);
     }
 
 }

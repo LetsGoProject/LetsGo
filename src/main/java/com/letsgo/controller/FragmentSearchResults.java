@@ -16,6 +16,7 @@ import android.widget.CheckBox;
 import android.widget.ListView;
 
 import com.letsgo.R;
+import com.letsgo.controller.adapters.AdapterShowEvents;
 import com.letsgo.model.Event;
 import com.letsgo.model.daointerfaces.EventDao;
 import com.letsgo.model.datasources.EventDataSource;
@@ -99,7 +100,7 @@ public class FragmentSearchResults extends AbstractFragment {
                 FragmentManager fm = getFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
                 Fragment advancedSearch = new FragmentAdvancedSearch();
-                ft.setCustomAnimations(android.R.anim.slide_in_left,android.R.anim.slide_out_right,R.anim.slide_in_right,R.anim.slide_out_left);
+                ft.setCustomAnimations(R.anim.slide_in_left,R.anim.slide_out_right,R.anim.slide_in_right,R.anim.slide_out_left);
                 ft.replace(R.id.frag_container, advancedSearch);
                 ft.addToBackStack(null);
                 ft.commit();
