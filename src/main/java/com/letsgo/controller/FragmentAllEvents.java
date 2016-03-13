@@ -5,8 +5,12 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.Interpolator;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
@@ -43,34 +47,45 @@ public class FragmentAllEvents extends Fragment {
         View view = inflater.inflate(R.layout.fragment_all_events, container, false);
 
         eventDataSource = new EventDataSource(getContext());
-        ((EventDataSource)eventDataSource).open();
+        ((EventDataSource) eventDataSource).open();
 
         final List<Event> upcomingEventsDataSource = eventDataSource.showEvents("upcoming");
         final List<Event> pastEventsDataSource = eventDataSource.showEvents("past");
 
 
         listPastEvents = (ListView) view.findViewById(R.id.all_events_past_list);
-        ArrayAdapter<Event> adapterPastEvents = new AdapterShowEvents(getContext(),(ArrayList<Event>)pastEventsDataSource);
+        ArrayAdapter<Event> adapterPastEvents = new AdapterShowEvents(getContext(), (ArrayList<Event>) pastEventsDataSource);
         listPastEvents.setAdapter(adapterPastEvents);
         listPastEvents.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 CheckBox isFav = (CheckBox) view.findViewById(R.id.is_in_fav);
-                rootContext.sendEvent(new FragmentSingleEvent(),pastEventsDataSource.get(position), isFav.isChecked());
+                rootContext.sendEvent(new FragmentSingleEvent(), pastEventsDataSource.get(position), isFav.isChecked());
 //                LoadSingleEventFragment.load(getFragmentManager(),pastEventsDataSource,position,view);
             }
         });
 
-        ArrayAdapter<Event> adapterUpcomingEvents = new AdapterShowEvents(getContext(),(ArrayList<Event>)upcomingEventsDataSource);
+        ArrayAdapter<Event> adapterUpcomingEvents = new AdapterShowEvents(getContext(), (ArrayList<Event>) upcomingEventsDataSource);
         listUpcomingEvents = (ListView) view.findViewById(R.id.all_events_upcoming_list);
         listUpcomingEvents.setAdapter(adapterUpcomingEvents);
         adapterUpcomingEvents.notifyDataSetChanged();
+        listUpcomingEvents.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                Animation someAnim = AnimationUtils.loadAnimation(getContext(), R.anim.shake);
+                view.startAnimation(someAnim);
+                return false;
+            }
+        });
         listUpcomingEvents.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (view.getAnimation()!= null && view.getAnimation().hasStarted()){
+                    view.clearAnimation();
+                    return;
+                }
                 CheckBox isFav = (CheckBox) view.findViewById(R.id.is_in_fav);
-                rootContext.sendEvent(new FragmentSingleEvent(),upcomingEventsDataSource.get(position), isFav.isChecked());
-//                LoadSingleEventFragment.load(getFragmentManager(),upcomingEventsDataSource,position,view);
+                rootContext.sendEvent(new FragmentSingleEvent(), upcomingEventsDataSource.get(position), isFav.isChecked());
             }
         });
         return view;
@@ -78,13 +93,13 @@ public class FragmentAllEvents extends Fragment {
 
     @Override
     public void onResume() {
-        ((EventDataSource)eventDataSource).open();
+        ((EventDataSource) eventDataSource).open();
         super.onResume();
     }
 
     @Override
     public void onPause() {
-        ((EventDataSource)eventDataSource).close();
+        ((EventDataSource) eventDataSource).close();
         super.onPause();
     }
 }

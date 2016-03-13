@@ -5,6 +5,7 @@ import com.letsgo.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Petkata on 5.3.2016 г..
@@ -21,6 +22,8 @@ public interface UserDao {
     boolean addEventToWatchlist(long userId,String event_name);
     boolean removeEventFromWatchlist(long userId,String eventName);
     boolean removeAllFromWatchlist(long userId);
+    boolean buyTicket(long userId,long eventId,int quantity);
+    Map<Event,Integer> selectTicketsForUser (long userId);
 
     boolean checkForExisting(String table,String column,String selectionArg);
 

@@ -99,7 +99,9 @@ public class FragmentSearchResults extends AbstractFragment {
                 FragmentManager fm = getFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
                 Fragment advancedSearch = new FragmentAdvancedSearch();
+                ft.setCustomAnimations(android.R.anim.slide_in_left,android.R.anim.slide_out_right,R.anim.slide_in_right,R.anim.slide_out_left);
                 ft.replace(R.id.frag_container, advancedSearch);
+                ft.addToBackStack(null);
                 ft.commit();
             }
         });

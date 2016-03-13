@@ -2,6 +2,7 @@ package com.letsgo.controller;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -36,6 +37,7 @@ public class ActivityMain extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
 
         userDataSource = new UserDataSource(this);
@@ -165,6 +167,7 @@ public class ActivityMain extends AppCompatActivity
     private void loadInitialFrag(Fragment fr){
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
+        ft.setCustomAnimations(R.anim.slide_in_right,R.anim.slide_out_left,R.anim.slide_in_left,R.anim.slide_out_right);
         ft.add(R.id.frag_container, fr);
         ft.commit();
     }
@@ -172,6 +175,7 @@ public class ActivityMain extends AppCompatActivity
     private void replaceFrag(Fragment fr){
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
+        ft.setCustomAnimations(R.anim.slide_in_left,R.anim.slide_out_right,R.anim.slide_in_right,R.anim.slide_out_left);
         ft.replace(R.id.frag_container,fr);
         ft.addToBackStack(null);
         ft.commit();
@@ -210,6 +214,7 @@ public class ActivityMain extends AppCompatActivity
         receiver.getEvent(event, isFav);
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction tr = fm.beginTransaction();
+        tr.setCustomAnimations(R.anim.slide_in_right,R.anim.slide_out_left,R.anim.slide_in_left,R.anim.slide_out_right);
         View ticktetContainer = findViewById(R.id.land_frag_ticket);
         if (ticktetContainer != null && ticktetContainer.getVisibility() == View.VISIBLE){
             tr.replace(R.id.land_frag_ticket, receiver);
@@ -228,6 +233,7 @@ public class ActivityMain extends AppCompatActivity
         receiver.getSearchCriteria(eventName,eventType,eventLocation,afterDate,beforeDate);
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction tr = fm.beginTransaction();
+        tr.setCustomAnimations(R.anim.slide_in_right,R.anim.slide_out_left,R.anim.slide_in_left,R.anim.slide_out_right);
         View ticktetContainer = findViewById(R.id.land_frag_ticket);
         if (ticktetContainer != null && ticktetContainer.getVisibility() == View.VISIBLE){
             tr.replace(R.id.land_frag_ticket, receiver);

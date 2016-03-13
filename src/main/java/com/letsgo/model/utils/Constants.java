@@ -10,7 +10,7 @@ public class Constants {
 
     public static final String DB_NAME = "LetsGo.db";
     public static final String ALLOW_FOREIGN_KEYS = "pragma foreign_keys = on";
-    public static final int DB_VERSION = 1;
+    public static final int DB_VERSION = 2;
 
     public static final String TABLE_LOCATIONS = "Locations";
     public static final String TABLE_TYPES = "Types";
@@ -46,4 +46,5 @@ public class Constants {
     //        -----TICKETS & FAVOURITES TABLE----
     public static final String FKEY_EVENT_ID = "event_id_fk";
     public static final String FKEY_USER_ID = "user_id_fk";
+    public static final String TICKET_QUANTITY = "ticket_qunatity";
 }

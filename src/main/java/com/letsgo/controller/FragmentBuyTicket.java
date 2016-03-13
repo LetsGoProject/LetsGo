@@ -1,6 +1,8 @@
 package com.letsgo.controller;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -10,9 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.letsgo.R;
 import com.letsgo.model.Event;
+import com.letsgo.model.daointerfaces.UserDao;
+import com.letsgo.model.datasources.UserDataSource;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,12 +28,20 @@ public class FragmentBuyTicket extends AbstractFragment {
     int quantity;
     double price;
     double total;
+    long userId;
+
+    UserDao userDataSource;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_buy_ticket, container, false);
+
+        userDataSource = new UserDataSource(getContext());
+        ((UserDataSource)userDataSource).open();
+        SharedPreferences getUserId = getActivity().getPreferences(Context.MODE_PRIVATE);
+        userId = getUserId.getLong("user_id", -1);
 
         quantity = 0;
         price = event.getEventTicketPrice();
@@ -77,6 +90,9 @@ public class FragmentBuyTicket extends AbstractFragment {
                                     select AUTOINCREMETN_COLUMN from TABLE_USERS where USERS_EMAIL = user.getEmail()
                                      )
 */
+                if (userDataSource.buyTicket(userId,event.getEventId(),Integer.valueOf(ticketQuan.getText().toString())))
+                    Toast.makeText(getContext(), "YEI", Toast.LENGTH_SHORT).show();
+
             }
         });
 

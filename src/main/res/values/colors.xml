@@ -17,5 +17,6 @@
     <color name="indigo">#7c678b</color>
     <color name="pink">#f0f</color>
     <color name="black">#000</color>
+    <color name="fragment_semi_transparent">#56ffffff</color>
 
 </resources>
