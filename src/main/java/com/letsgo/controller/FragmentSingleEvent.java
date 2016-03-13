@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +23,9 @@ import java.util.Calendar;
 
 public class FragmentSingleEvent extends AbstractFragment {
 
-//    TODO find if in watchlist
+    public FragmentSingleEvent() {
+        setArguments(new Bundle());
+    }
 
     UserDao userDataSource;
 
@@ -44,7 +47,6 @@ public class FragmentSingleEvent extends AbstractFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.fragment_single_event, container, false);
 
 
@@ -67,6 +69,7 @@ public class FragmentSingleEvent extends AbstractFragment {
         eventPrice.setText(String.valueOf(selectedEvent.getEventTicketPrice()));
 
         fab = (FloatingActionButton) view.findViewById(R.id.fab);
+
         if (isFav)
             fab.setImageResource(android.R.drawable.btn_star_big_on);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -75,7 +78,7 @@ public class FragmentSingleEvent extends AbstractFragment {
 
                 if (!isFav) {
                     if (userDataSource.addEventToWatchlist(userId, selectedEvent.getEventName())) {
-
+                        isFav = true;
                         fab.setImageResource(android.R.drawable.btn_star_big_on);
                         Snackbar.make(view, "Event added to your watchlist", Snackbar.LENGTH_SHORT)
                                 .setAction("Action", null).show();
@@ -147,13 +150,13 @@ public class FragmentSingleEvent extends AbstractFragment {
 
     @Override
     public void onResume() {
-        ((UserDataSource) userDataSource).open();
         super.onResume();
+        ((UserDataSource) userDataSource).open();
     }
 
     @Override
     public void onPause() {
-        ((UserDataSource) userDataSource).close();
         super.onPause();
+        ((UserDataSource) userDataSource).close();
     }
 }
