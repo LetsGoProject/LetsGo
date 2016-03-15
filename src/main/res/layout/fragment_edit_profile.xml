@@ -64,6 +64,15 @@
         android:ems="10"
         android:hint="New password"
         android:inputType="textPassword" />
+    <EditText
+        android:id="@+id/profile_edit_retype_password"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_margin="10dp"
+        android:layout_weight="1"
+        android:ems="10"
+        android:hint="Retype new password"
+        android:inputType="textPassword" />
 
     <Button
         android:id="@+id/profile_change"

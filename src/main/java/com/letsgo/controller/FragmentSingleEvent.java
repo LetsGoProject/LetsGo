@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.letsgo.R;
 import com.letsgo.model.Event;
@@ -45,6 +46,14 @@ public class FragmentSingleEvent extends AbstractFragment {
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (savedInstanceState!=null) {
+            selectedEvent = savedInstanceState.getParcelable("event");
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_single_event, container, false);
@@ -58,13 +67,19 @@ public class FragmentSingleEvent extends AbstractFragment {
 
         final TextView eventName = (TextView) view.findViewById(R.id.single_event_name);
         TextView eventDate = (TextView) view.findViewById(R.id.single_event_date);
-        TextView eventLocation = (TextView) view.findViewById(R.id.single_event_location);
+        final TextView eventLocation = (TextView) view.findViewById(R.id.single_event_location);
         TextView eventDescription = (TextView) view.findViewById(R.id.single_event_description);
         TextView eventPrice = (TextView) view.findViewById(R.id.single_event_ticket_price);
 
         eventName.setText(selectedEvent.getEventName());
         eventDate.setText(DateFormater.from_yyyyMMdd_To_dMMMyyyy(selectedEvent.getEventDate()));
         eventLocation.setText(selectedEvent.getEventLocation());
+        eventLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rootContext.sendLocationName(eventLocation.getText().toString());
+            }
+        });
         eventDescription.setText(selectedEvent.getEventDescription());
         eventPrice.setText(String.valueOf(selectedEvent.getEventTicketPrice()));
 
@@ -158,5 +173,11 @@ public class FragmentSingleEvent extends AbstractFragment {
     public void onPause() {
         super.onPause();
         ((UserDataSource) userDataSource).close();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable("event",selectedEvent);
     }
 }

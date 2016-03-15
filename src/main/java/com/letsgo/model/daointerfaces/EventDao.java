@@ -23,6 +23,7 @@ public interface EventDao {
     boolean checkForExisting(String table,String column,String selectionArg);
 
     List<Event> showEvents(String period);
+
     List<Event> showSearchResults(String name,String type,String location,String dateBefore,String dateAfter);
 
     List<Long> selectAllFavEventsIdsForUserId(long userId);

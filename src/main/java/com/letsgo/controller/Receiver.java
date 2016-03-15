@@ -7,6 +7,7 @@ import com.letsgo.model.Event;
  */
 public interface Receiver {
 
-    void getEvent(Event e,boolean isFav);
-    void getSearchCriteria(String eventName,String eventType,String eventLocation,String afterDate,String beforeDate);
+//    void getEvent(Event e,boolean isFav);
+//    void getSearchCriteria(String eventName,String eventType,String eventLocation,String afterDate,String beforeDate);
+
 }

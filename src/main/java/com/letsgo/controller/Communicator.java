@@ -11,4 +11,6 @@ public interface Communicator {
     void sendEvent(AbstractFragment fragment,Event event,boolean isFav);
     void sendSearchCriteria(AbstractFragment fragment,String eventName,String eventType,
                             String eventLocation,String afterDate,String beforeDate);
+    void sendLocationName(String locationName);
+    void getUsername(String username);
 }

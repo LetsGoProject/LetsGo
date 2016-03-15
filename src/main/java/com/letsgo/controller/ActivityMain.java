@@ -8,6 +8,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -32,6 +33,7 @@ public class ActivityMain extends AppCompatActivity
 
     UserDao userDataSource;
     User currentUser;
+    String newUsername;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +65,7 @@ public class ActivityMain extends AppCompatActivity
 //        String email = getIntent().getStringExtra("userMail");
         ((TextView) headView.findViewById(R.id.nav_header_email)).setText(currentUser.getEmail());
         ((TextView) headView.findViewById(R.id.nav_header_username)).setText(currentUser.getUsername());
+
 //        ((TextView) headView.findViewById(R.id.nav_header_email)).setText(email);
 //        ((TextView) headView.findViewById(R.id.nav_header_username)).setText(currentUser.getUsername());
 
@@ -167,7 +170,7 @@ public class ActivityMain extends AppCompatActivity
     private void loadInitialFrag(Fragment fr){
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        ft.setCustomAnimations(R.anim.slide_in_right,R.anim.slide_out_left,R.anim.slide_in_left,R.anim.slide_out_right);
+        ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
         ft.add(R.id.frag_container, fr);
         ft.commit();
     }
@@ -176,7 +179,7 @@ public class ActivityMain extends AppCompatActivity
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         ft.setCustomAnimations(R.anim.slide_in_left,R.anim.slide_out_right,R.anim.slide_in_right,R.anim.slide_out_left);
-        ft.replace(R.id.frag_container,fr);
+        ft.replace(R.id.frag_container, fr);
         ft.addToBackStack(null);
         ft.commit();
     }
@@ -189,6 +192,11 @@ public class ActivityMain extends AppCompatActivity
 
     @Override
     protected void onPause() {
+        Log.e("NULL NEWUSERNAME", "NULL");
+        if (newUsername != null){
+            ((TextView) this.findViewById(R.id.nav_header_username)).setText(newUsername);
+            Log.e("NULL NEWUSERNAME", newUsername);
+        }
         ((UserDataSource)userDataSource).close();
         super.onPause();
     }
@@ -230,7 +238,7 @@ public class ActivityMain extends AppCompatActivity
     @Override
     public void sendSearchCriteria(AbstractFragment receiver, String eventName, String eventType,
                                    String eventLocation, String afterDate, String beforeDate) {
-        receiver.getSearchCriteria(eventName,eventType,eventLocation,afterDate,beforeDate);
+        receiver.getSearchCriteria(eventName, eventType, eventLocation, afterDate, beforeDate);
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction tr = fm.beginTransaction();
         tr.setCustomAnimations(R.anim.slide_in_right,R.anim.slide_out_left,R.anim.slide_in_left,R.anim.slide_out_right);
@@ -245,4 +253,30 @@ public class ActivityMain extends AppCompatActivity
         tr.addToBackStack(null);
         tr.commit();
     }
+
+    @Override
+    public void sendLocationName(String locationName) {
+        AbstractFragment locationInfo = new FragmentLocationInfo();
+        locationInfo.getLocationByName(locationName);
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction tr = fm.beginTransaction();
+        tr.setCustomAnimations(R.anim.slide_in_right,R.anim.slide_out_left,R.anim.slide_in_left,R.anim.slide_out_right);
+        tr.replace(R.id.frag_container,locationInfo,"location_info");
+        tr.addToBackStack(null);
+        tr.commit();
+    }
+
+    @Override
+    public void getUsername(String username) {
+        newUsername = username;
+        this.onPause();
+    }
+
+    //    TODO think of something to use this in every fragment
+    long getUserId(){
+        SharedPreferences getUserId =getPreferences(MODE_PRIVATE);
+        return getUserId.getLong("user_id", -1);
+    }
+
+
 }

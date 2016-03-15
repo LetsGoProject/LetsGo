@@ -9,13 +9,16 @@ import com.letsgo.model.Event;
  */
 public abstract class AbstractFragment extends Fragment implements Receiver{
 
-    @Override
+//    @Override
     public void getEvent(Event e, boolean isFav) {
 
     }
 
-    @Override
+//    @Override
     public void getSearchCriteria(String eventName, String eventType, String eventLocation, String afterDate, String beforeDate) {
 
     }
+
+    public void getLocationByName(String locationName){}
+
 }

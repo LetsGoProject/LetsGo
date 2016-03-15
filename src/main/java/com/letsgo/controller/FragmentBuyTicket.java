@@ -124,6 +124,17 @@ public class FragmentBuyTicket extends AbstractFragment {
         return view;
     }
 
+    @Override
+    public void onResume() {
+        ((UserDataSource) userDataSource).open();
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        ((UserDataSource) userDataSource).close();
+        super.onPause();
+    }
 
     double calcTotalPrice(int quant) {
         return price * quant;

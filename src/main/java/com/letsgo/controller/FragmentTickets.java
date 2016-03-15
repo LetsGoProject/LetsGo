@@ -54,4 +54,17 @@ public class FragmentTickets extends Fragment {
         return v;
     }
 
+
+    @Override
+    public void onResume() {
+        ((UserDataSource)userDataSource).open();
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        ((UserDataSource)userDataSource).close();
+        super.onPause();
+    }
+
 }

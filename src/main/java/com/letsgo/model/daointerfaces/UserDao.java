@@ -18,9 +18,12 @@ public interface UserDao {
 
     User showUser(String email);
 
-    boolean editUsername(String email,String newUsername);
-    boolean editEmail(String email,String newEmail);
-    boolean editPassword(String email,String newPassword);
+    boolean editUsername(long userId,String newUsername);
+
+    boolean editEmail(long userId,String newEmail);
+
+    boolean editPassword(long userId,String newPassword);
+
     boolean deleteUser(String email);
 
     boolean addEventToWatchlist(long userId,String eventName);

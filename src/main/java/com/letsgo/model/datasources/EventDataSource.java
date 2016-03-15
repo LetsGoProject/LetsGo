@@ -141,19 +141,19 @@ public class EventDataSource extends DataSource implements EventDao {
         List<Event> dateAfterSearchResults;
         List<Event> dateBeforeSearchResults;
 
-        if(name.length() > 0)
+        if(name != null && name.length() > 0)
             nameSearchResults = results("%"+name+"%", Constants.EVENTS_NAME, "like");
         else
             nameSearchResults = allEvents();
 
-        if(!type.equals("Choose"))
+        if(type != null &&!type.equals("Choose"))
             typeSearchResults = results(type, Constants.TYPES_TYPE, "=");
         else
             typeSearchResults = allEvents();
 
         nameSearchResults.retainAll(typeSearchResults);
 
-        if( !location.equals("Choose"))
+        if(location != null && !location.equals("Choose"))
             locationSearchResults = results(location, Constants.LOCATIONS_NAME, "=");
         else
             locationSearchResults = allEvents();
