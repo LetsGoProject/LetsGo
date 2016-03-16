@@ -1,4 +1,4 @@
-package com.letsgo.controller;
+package com.letsgo.controller.fragments;
 
 
 import android.content.Context;
@@ -17,6 +17,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.letsgo.R;
+import com.letsgo.controller.controllerutils.AbstractFragment;
+import com.letsgo.controller.controllerutils.Communicator;
 import com.letsgo.controller.adapters.AdapterShowEvents;
 import com.letsgo.model.Event;
 import com.letsgo.model.Location;
@@ -78,7 +80,6 @@ public class FragmentLocationInfo extends AbstractFragment {
         listViewEventsForLocation.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//               LoadSingleEventFragment.load(getFragmentManager(),searchResultsDataSource,position,view);
                 CheckBox isFav = (CheckBox) view.findViewById(R.id.is_in_fav);
                 if (getActivity().findViewById(R.id.land_frag_container) != null) {
                     getActivity().findViewById(R.id.frag_container).setVisibility(View.GONE);

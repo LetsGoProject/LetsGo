@@ -1,4 +1,4 @@
-package com.letsgo.controller;
+package com.letsgo.controller.fragments;
 
 
 import android.app.DatePickerDialog;
@@ -19,6 +19,8 @@ import android.widget.RadioButton;
 import android.widget.Spinner;
 
 import com.letsgo.R;
+import com.letsgo.controller.controllerutils.Communicator;
+import com.letsgo.controller.controllerutils.DateFormater;
 import com.letsgo.model.daointerfaces.EventDao;
 import com.letsgo.model.daointerfaces.LocationDao;
 import com.letsgo.model.datasources.EventDataSource;

@@ -1,4 +1,4 @@
-package com.letsgo.controller;
+package com.letsgo.controller.fragments;
 
 
 import android.content.Context;
@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.letsgo.R;
+import com.letsgo.controller.controllerutils.Communicator;
 import com.letsgo.model.daointerfaces.UserDao;
 import com.letsgo.model.datasources.UserDataSource;
 

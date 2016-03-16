@@ -1,14 +1,12 @@
-package com.letsgo.controller;
+package com.letsgo.controller.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -21,6 +19,16 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.letsgo.R;
+import com.letsgo.controller.controllerutils.AbstractFragment;
+import com.letsgo.controller.controllerutils.Communicator;
+import com.letsgo.controller.fragments.FragmentAdvancedSearch;
+import com.letsgo.controller.fragments.FragmentAllEvents;
+import com.letsgo.controller.fragments.FragmentEditProfile;
+import com.letsgo.controller.fragments.FragmentLocationInfo;
+import com.letsgo.controller.fragments.FragmentLocations;
+import com.letsgo.controller.fragments.FragmentTickets;
+import com.letsgo.controller.fragments.FragmentUpcommingEvents;
+import com.letsgo.controller.fragments.FragmentWatchlist;
 import com.letsgo.model.Event;
 import com.letsgo.model.User;
 import com.letsgo.model.daointerfaces.UserDao;
@@ -110,6 +118,9 @@ public class ActivityMain extends AppCompatActivity
             return true;
         }
         if (id == R.id.options_menu_main_search) {
+            Fragment advSearch = new FragmentAdvancedSearch();
+            replaceFrag(advSearch);
+
             return true;
         }
 
@@ -130,15 +141,17 @@ public class ActivityMain extends AppCompatActivity
             Fragment watchlist = new FragmentWatchlist();
             replaceFrag(watchlist);
 
-        } else if (id == R.id.nav_upcomming) {
+        }
+        else if (id == R.id.nav_upcomming) {
             Fragment upcomming = new FragmentUpcommingEvents();
             replaceFrag(upcomming);
 
         } else if (id == R.id.nav_past) {
-            Fragment pastEvents = new FragmentPastEvents();
+            Fragment pastEvents = new FragmentLocations();
             replaceFrag(pastEvents);
 
-        } else if (id == R.id.nav_adv_search) {
+        }
+        else if (id == R.id.nav_adv_search) {
             Fragment advSearch = new FragmentAdvancedSearch();
             replaceFrag(advSearch);
 
@@ -192,10 +205,8 @@ public class ActivityMain extends AppCompatActivity
 
     @Override
     protected void onPause() {
-        Log.e("NULL NEWUSERNAME", "NULL");
         if (newUsername != null){
             ((TextView) this.findViewById(R.id.nav_header_username)).setText(newUsername);
-            Log.e("NULL NEWUSERNAME", newUsername);
         }
         ((UserDataSource)userDataSource).close();
         super.onPause();
@@ -218,7 +229,6 @@ public class ActivityMain extends AppCompatActivity
 
     @Override
     public void sendEvent(AbstractFragment receiver,Event event,boolean isFav) {
-//        LoadSingleEventFragment.sendEventToSingleEventFragment(ActivityMain.this.getSupportFragmentManager(),event,fragment,isFav);
         receiver.getEvent(event, isFav);
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction tr = fm.beginTransaction();

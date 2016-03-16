@@ -5,7 +5,7 @@
     android:background="@drawable/transparent_background_border"
     android:padding="7dp"
     android:orientation="vertical"
-    tools:context=".controller.FragmentWatchlist">
+    tools:context=".controller.fragments.FragmentWatchlist">
 
 
     <TextView

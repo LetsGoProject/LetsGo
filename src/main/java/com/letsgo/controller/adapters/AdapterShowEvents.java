@@ -11,7 +11,7 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.letsgo.R;
-import com.letsgo.controller.DateFormater;
+import com.letsgo.controller.controllerutils.DateFormater;
 import com.letsgo.model.Event;
 import com.letsgo.model.daointerfaces.EventDao;
 import com.letsgo.model.datasources.EventDataSource;
@@ -75,17 +75,6 @@ public class AdapterShowEvents extends ArrayAdapter<Event> {
         }else{
             holder = (CustomViewHolder) row.getTag();
         }
-
-//          Set some distinct color
-//        if (position % 2 == 0)
-//        {
-//            row.setBackgroundResource(R.color.cardview_shadow_end_color);
-//        }
-//
-//        else
-//        {
-//            row.setBackgroundResource(R.color.cardview_shadow_end_color);
-//        }
 
         if (listEventIds.contains(events.get(position).getEventId())){
             row.setBackgroundResource(R.color.yellow);

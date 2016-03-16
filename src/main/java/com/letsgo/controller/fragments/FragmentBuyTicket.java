@@ -1,4 +1,4 @@
-package com.letsgo.controller;
+package com.letsgo.controller.fragments;
 
 
 import android.content.Context;
@@ -6,8 +6,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.letsgo.R;
+import com.letsgo.controller.controllerutils.AbstractFragment;
 import com.letsgo.controller.dialogs.SuccessDialog;
 import com.letsgo.model.Event;
 import com.letsgo.model.daointerfaces.UserDao;
@@ -47,7 +46,6 @@ public class FragmentBuyTicket extends AbstractFragment {
         ((UserDataSource) userDataSource).open();
         SharedPreferences getUserId = getActivity().getPreferences(Context.MODE_PRIVATE);
         userId = getUserId.getLong("user_id", -1);
-
         quantity = 0;
         price = event.getEventTicketPrice();
         total = 0;
@@ -90,12 +88,12 @@ public class FragmentBuyTicket extends AbstractFragment {
         buy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-/*                ToDo add to db insert into TABLE_TICKETS_EVENTS_USERS (FKEY_EVENT_ID,FKEY_USER_ID)
+                /*
                                     values(select AUTOINCREMETN_COLUMN from TABLE_EVENTS where EVENTS_NAME = event.getEventName(),
                                     select AUTOINCREMETN_COLUMN from TABLE_USERS where USERS_EMAIL = user.getEmail()
                                      )
 */
-                if (quantity<=0){
+                if (quantity <= 0) {
                     Toast.makeText(getContext(), "Must buy at least 1 ticket", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -103,11 +101,9 @@ public class FragmentBuyTicket extends AbstractFragment {
                 SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 String formattedDate = df.format(c.getTime());
                 if (userDataSource.buyTicket(formattedDate, userId, event.getEventId(), quantity)) {
-//                    TODO MAKE DIALOG HERE
                     SuccessDialog successDialog = new SuccessDialog();
-                    successDialog.getData(event.getEventName(),String.valueOf(quantity));
-                    successDialog.show(getFragmentManager(),"success");
-                    Toast.makeText(getContext(), "SUCCESS", Toast.LENGTH_SHORT).show();
+                    successDialog.getData(event.getEventName(), String.valueOf(quantity));
+                    successDialog.show(getFragmentManager(), "success");
                 }
             }
         });

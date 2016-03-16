@@ -1,6 +1,4 @@
-package com.letsgo.controller;
-
-import android.widget.CheckBox;
+package com.letsgo.controller.controllerutils;
 
 import com.letsgo.model.Event;
 

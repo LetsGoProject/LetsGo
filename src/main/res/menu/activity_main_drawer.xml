@@ -12,10 +12,12 @@
             android:title="WatchList" />
         <item
             android:id="@+id/nav_upcomming"
+            android:visible="false"
             android:icon="@drawable/ic_menu_gallery"
             android:title="Upcomming" />
         <item
             android:id="@+id/nav_past"
+            android:visible="false"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="Past" />
         <item

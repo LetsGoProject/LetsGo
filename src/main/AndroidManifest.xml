@@ -8,19 +8,18 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".controller.ActivityLogin">
+        <activity android:name=".controller.activities.ActivityLogin">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".controller.ActivityRegister" />
+        <activity android:name=".controller.activities.ActivityRegister" />
         <activity
-            android:name=".controller.ActivityMain"
+            android:name=".controller.activities.ActivityMain"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".controller.ActivityAdvSearch"></activity>
     </application>
 
 </manifest>

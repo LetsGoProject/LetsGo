@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:padding="7dp"
     android:background="@drawable/transparent_background_border"
-    tools:context=".controller.FragmentSingleEvent">
+    tools:context=".controller.fragments.FragmentSingleEvent">
 
     <Button
         android:id="@+id/next_event"

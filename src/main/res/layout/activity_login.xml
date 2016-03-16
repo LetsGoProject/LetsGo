@@ -8,9 +8,11 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".controller.ActivityLogin">
+    tools:context=".controller.activities.ActivityLogin">
 
     <EditText
+        android:textColor="@color/white"
+        android:textColorHint="@color/grey"
         android:id="@+id/edt_Login_Email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -20,14 +22,18 @@
         android:inputType="textEmailAddress" />
 
     <EditText
+        android:textColor="@color/white"
+        android:textColorHint="@color/grey"
         android:id="@+id/edt_Login_Pass"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="@string/login_pass"
+        android:imeOptions="actionDone"
         android:inputType="textPassword" />
 
     <CheckBox
+        android:textColor="@color/white"
         android:id="@+id/chb_keep_logged"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -63,4 +69,5 @@
                 android:text="register" />
         </GridLayout>
     </LinearLayout>
+
 </LinearLayout>

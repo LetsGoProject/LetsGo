@@ -2,12 +2,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".controller.FragmentPastEvents">
+    tools:context=".controller.fragments.FragmentLocations">
 
     <TextView
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Past Events" />
+        android:text="Locations" />
 
 </FrameLayout>

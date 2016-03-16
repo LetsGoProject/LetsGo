@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@drawable/transparent_background_border"
-    tools:context=".controller.FragmentAdvancedSearch">
+    tools:context=".controller.fragments.FragmentAdvancedSearch">
 
     <ScrollView
         android:id="@+id/scrollView2"

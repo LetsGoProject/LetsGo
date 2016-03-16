@@ -6,7 +6,7 @@
     android:background="@drawable/transparent_background_border"
     android:orientation="vertical"
     android:padding="7dp"
-    tools:context=".controller.FragmentTickets">
+    tools:context=".controller.fragments.FragmentTickets">
 
     <TextView
         android:layout_width="match_parent"

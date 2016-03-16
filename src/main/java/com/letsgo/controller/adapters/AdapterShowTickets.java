@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.letsgo.R;
-import com.letsgo.controller.DateFormater;
+import com.letsgo.controller.controllerutils.DateFormater;
 import com.letsgo.model.Event;
 
 import java.util.ArrayList;

@@ -2,21 +2,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@drawable/transparent_background_border"
+    android:orientation="vertical"
     android:padding="7dp"
-    tools:context=".controller.FragmentAllEvents">
+    tools:context=".controller.fragments.FragmentAllEvents">
 
     <!-- TODO: Update blank fragment layout -->
 
     <TextView
-        android:gravity="center"
-        android:padding="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="5dp"
         android:text="Upcoming Events"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
+
+    <ProgressBar
+        android:id="@+id/progressBar_all_upcoming"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal" />
 
     <ListView
         android:id="@+id/all_events_upcoming_list"
@@ -26,12 +33,19 @@
         android:layout_weight="1" />
 
     <TextView
-        android:gravity="center"
-        android:padding="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="5dp"
         android:text="Past Events"
         android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <ProgressBar
+        android:id="@+id/progressBar_all_past"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal" />
 
     <ListView
         android:id="@+id/all_events_past_list"

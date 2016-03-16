@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:padding="7dp"
     android:background="@drawable/transparent_background_border"
-    tools:context=".controller.FragmentEditProfile">
+    tools:context=".controller.fragments.FragmentEditProfile">
 
     <TextView
         android:layout_width="wrap_content"

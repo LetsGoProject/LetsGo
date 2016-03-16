@@ -1,25 +1,20 @@
-package com.letsgo.controller;
+package com.letsgo.controller.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.letsgo.R;
-import com.letsgo.model.User;
-import com.letsgo.model.daointerfaces.UserDao;
-import com.letsgo.model.datasources.UserDataSource;
+import com.letsgo.tasks.TaskLogin;
+import com.letsgo.tasks.TaskStayLogged;
 
 public class ActivityLogin extends AppCompatActivity {
-
-    UserDao userDataSource;
 
     EditText edtLoginEmail;
     EditText edtLoginPass;
@@ -29,26 +24,18 @@ public class ActivityLogin extends AppCompatActivity {
 
     CheckBox chbKeepLogged;
 
+    TaskLogin taskLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        userDataSource = new UserDataSource(this);
-        ((UserDataSource)userDataSource).open();
-
+//      Check if keep logged in is checked
         if (logInfo()!= null &&logInfo().length()>0)
         {
-            Intent intent = new Intent(ActivityLogin.this, ActivityMain.class);
-            User user = userDataSource.showUser(logInfo());
-            intent.putExtra("user",user);
-            startActivity(intent);
-            finish();
+            new TaskStayLogged(this,logInfo()).execute();
+
         }
-
         setContentView(R.layout.activity_login);
-
-
 
         edtLoginEmail = (EditText) findViewById(R.id.edt_Login_Email);
         edtLoginPass = (EditText) findViewById(R.id.edt_Login_Pass);
@@ -61,19 +48,11 @@ public class ActivityLogin extends AppCompatActivity {
             public void onClick(View v) {
                 String userEmail = edtLoginEmail.getText().toString();
                 String userPass = edtLoginPass.getText().toString();
-                if (userDataSource.loginUser(userEmail,userPass)) {
-//                    save isLoggedState and User ho is logged
-                    if (chbKeepLogged.isChecked())
-                        keepLogged(userEmail);
-//                    TODO put user as extra vie parcelable
-                    User user = userDataSource.showUser(userEmail);
-                    Intent intent = new Intent(ActivityLogin.this, ActivityMain.class);
-                    intent.putExtra("user",user);
-                    startActivity(intent);
-                    finish();
-                }
-                else
-                    Toast.makeText(ActivityLogin.this, "Check input", Toast.LENGTH_SHORT).show();
+
+                if (chbKeepLogged.isChecked())
+                    keepLogged(userEmail);
+                taskLogin = new TaskLogin(ActivityLogin.this,userEmail,userPass);
+                taskLogin.execute();
             }
         });
 
@@ -89,7 +68,6 @@ public class ActivityLogin extends AppCompatActivity {
     }
 
     private void keepLogged(String email){
-//        TODO save user info (mail)
         SharedPreferences isLogged = PreferenceManager.getDefaultSharedPreferences(ActivityLogin.this);
         SharedPreferences.Editor editor = isLogged.edit();
         editor.putString("userMail",email);
@@ -103,13 +81,16 @@ public class ActivityLogin extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        ((UserDataSource)userDataSource).open();
+//        ((UserDataSource)userDataSource).open();
         super.onResume();
     }
 
     @Override
     protected void onPause() {
-        ((UserDataSource)userDataSource).close();
+//        ((UserDataSource)userDataSource).close();
         super.onPause();
     }
+
+
+
 }

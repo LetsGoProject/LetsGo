@@ -1,4 +1,4 @@
-package com.letsgo.controller;
+package com.letsgo.controller.fragments;
 
 
 import android.os.Bundle;
