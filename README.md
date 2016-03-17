@@ -8,7 +8,7 @@
 <h4>
 	Login screen
 </h4>
-	![Alt text](/../screenshots/login_screen.png?raw=true "login screen")
+	![Alt text](/../blob/screenshots/screenshots/login_screen.png?raw=true "login screen")
 <h4>
 	Register screen
 </h4>
